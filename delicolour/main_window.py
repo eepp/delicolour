@@ -1,4 +1,5 @@
 from delicolour import config
+from delicolour.app_model import AppModel
 from delicolour.scale_entry import ScaleEntry
 from delicolour.big_colour import BigColour
 from gi.repository import Gtk
@@ -9,6 +10,8 @@ class MainWindow(Gtk.Window):
         Gtk.Window.__init__(self, title="delicolour")
         self._make_me_nice()
         self._init_main_box()
+        self._model = AppModel()
+        self._update_view('init')
 
     def _make_me_nice(self):
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -86,16 +89,24 @@ class MainWindow(Gtk.Window):
         self._colour_box.pack_start(box, True, True, 0)
 
     def _init_colour_controls(self):
+        # build controls
         self._r_ctrl = ScaleEntry('R', 0, 255, 1, 1, 0.1, 0.3)
         self._g_ctrl = ScaleEntry('G', 0, 255, 1, 0, 0.5, 0)
         self._b_ctrl = ScaleEntry('B', 0, 255, 1, 0, 0.5, 1)
-        self._h_ctrl = ScaleEntry('H', 0, 100, 1)
+        self._h_ctrl = ScaleEntry('H', 0, 360, 1)
         self._s_ctrl = ScaleEntry('S', 0, 100, 1)
         self._v_ctrl = ScaleEntry('V', 0, 100, 1)
         a = Gtk.Alignment()
         a.set_padding(config.MAIN_GUTTER_PX, 0, 0, 0)
         a.add(self._h_ctrl)
 
+        # register listeners
+        self._r_ctrl.on_change(self._update_model_from_rgb)
+        self._g_ctrl.on_change(self._update_model_from_rgb)
+        self._b_ctrl.on_change(self._update_model_from_rgb)
+        self._h_ctrl.on_change(self._update_model_from_hsv)
+        self._s_ctrl.on_change(self._update_model_from_hsv)
+        self._v_ctrl.on_change(self._update_model_from_hsv)
 
         self._colour_box.pack_start(self._r_ctrl, True, True, 0)
         self._colour_box.pack_start(self._g_ctrl, True, True, 0)
@@ -114,6 +125,55 @@ class MainWindow(Gtk.Window):
         # colour controls
         self._init_colour_controls()
 
+    def _get_rgb_ctrl_values(self):
+        r = self._r_ctrl.get_value()
+        g = self._g_ctrl.get_value()
+        b = self._b_ctrl.get_value()
 
+        return r, g, b
 
+    def _get_hsv_ctrl_values(self):
+        h = self._h_ctrl.get_value()
+        s = self._s_ctrl.get_value()
+        v = self._v_ctrl.get_value()
 
+        return h, s, v
+
+    def _enable_hsv_events(self, en):
+        self._h_ctrl.enable_on_change(en)
+        self._s_ctrl.enable_on_change(en)
+        self._v_ctrl.enable_on_change(en)
+
+    def _update_model_from_rgb(self):
+        r, g, b = self._get_rgb_ctrl_values()
+        self._model.colour.set_rgb(r, g, b)
+        self._update_view('rgb')
+
+    def _update_model_from_hsv(self):
+        h, s, v = self._get_hsv_ctrl_values()
+        s /= 100
+        v /= 100
+        self._model.colour.set_hsv(h, s, v)
+        self._update_view('hsv')
+
+    def _update_big_colour(self):
+        self._big_colour.set_colour(self._model.colour)
+
+    def _update_rgb_ctrls(self):
+        r, g, b = self._model.colour.get_rgb()
+        self._r_ctrl.set_value_no_events(r)
+        self._g_ctrl.set_value_no_events(g)
+        self._b_ctrl.set_value_no_events(b)
+
+    def _update_hsv_ctrls(self):
+        h, s, v = self._model.colour.get_hsv()
+        self._h_ctrl.set_value_no_events(h)
+        self._s_ctrl.set_value_no_events(s * 100)
+        self._v_ctrl.set_value_no_events(v * 100)
+
+    def _update_view(self, focused_ctrl):
+        self._update_big_colour()
+        if focused_ctrl != 'hsv':
+            self._update_hsv_ctrls()
+        if focused_ctrl != 'rgb':
+            self._update_rgb_ctrls()

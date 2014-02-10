@@ -20,14 +20,15 @@ class ScaleEntry(Gtk.HBox):
         lbl.set_width_chars(2)
         lbl.set_markup('<b>{}</b>'.format(label))
         lbl.modify_fg(Gtk.StateType.NORMAL, color)
+        self._label = label
 
         # entry
         self._entry = Gtk.Entry()
         self._entry.modify_font(Pango.FontDescription('monospace bold 9'))
         self._entry.set_width_chars(4)
         self._entry.connect('insert-text', self._on_entry_insert_text)
-        self._entry.connect('changed', self._on_entry_changed)
-        self._entry.connect('button-press-event', self._on_entry_button_press)
+        self._entry_changed_handler = None
+        self._enable_entry_changed_event(True)
 
         # scale
         adjustment = Gtk.Adjustment(0, minval, maxval, step, 0, 0)
@@ -52,6 +53,15 @@ class ScaleEntry(Gtk.HBox):
     def do_nothing():
         pass
 
+    def _enable_entry_changed_event(self, en):
+        if en:
+            if self._entry_changed_handler is None:
+                self._entry_changed_handler = self._entry.connect('changed', self._on_entry_changed)
+        else:
+            if self._entry_changed_handler is not None:
+                self._entry.disconnect(self._entry_changed_handler)
+                self._entry_changed_handler = None
+
     def set_value(self, value):
         if value < self._minval:
             value = self._minval
@@ -63,12 +73,13 @@ class ScaleEntry(Gtk.HBox):
         self._scale.set_value(value)
         self._entry.set_text(str(int(value)))
 
+    def set_value_no_events(self, value):
+        self._enable_entry_changed_event(False)
+        self.set_value(value)
+        self._enable_entry_changed_event(True)
+
     def get_value(self):
         return self._scale.get_value()
-
-    def _on_entry_button_press(self, entry, ev):
-        pass
-        #self._entry.select_region(0, len(self._entry.get_text()))
 
     def _on_entry_insert_text(self, entry, new_text, new_text_length,
                               position):
@@ -76,6 +87,7 @@ class ScaleEntry(Gtk.HBox):
             self._entry.stop_emission('insert-text')
 
     def _on_entry_changed(self, editable):
+        print('changed! {}'.format(self._label))
         text = self._entry.get_text()
         if len(text) == 0:
             # consider nothing changed
@@ -85,9 +97,11 @@ class ScaleEntry(Gtk.HBox):
         self._user_on_change()
 
     def _on_scale_change_value(self, scale, scroll, value):
+        self.test4 = 'scale'
         self.set_value(value)
-        self._entry.grab_focus()
-        self._user_on_change()
+        self.set_focus()
+
+        return True
 
     def on_change(self, cb):
         self._user_on_change = cb
@@ -97,3 +111,6 @@ class ScaleEntry(Gtk.HBox):
 
     def get_scale(self):
         return self._scale
+
+    def set_focus(self):
+        self._entry.grab_focus()
