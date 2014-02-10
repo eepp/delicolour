@@ -23,11 +23,11 @@ class BigColour(Gtk.DrawingArea):
 
     def _on_draw(self, drawing_area, cr):
         def do_path():
-            cr.move_to(br, 0)
-            cr.arc(width - br, br, br, -0.5 * math.pi, 0)
-            cr.arc(width - br, height - br, br, 0, 0.5 * math.pi)
-            cr.arc(br, height - br, br, 0.5 * math.pi, 1 * math.pi)
-            cr.arc(br, br, br, 1 * math.pi, -0.5 * math.pi)
+            cr.move_to(br + 2, 2)
+            cr.arc(width - br - 2, br + 2, br, -0.5 * math.pi, 0)
+            cr.arc(width - br - 2, height - br - 2, br, 0, 0.5 * math.pi)
+            cr.arc(br + 2, height - br - 2, br, 0.5 * math.pi, 1 * math.pi)
+            cr.arc(br + 2, br + 2, br, 1 * math.pi, -0.5 * math.pi)
             cr.close_path()
 
         width, height = self._get_size()
@@ -45,8 +45,8 @@ class BigColour(Gtk.DrawingArea):
         cr.fill()
 
         # stroke
-        cr.set_line_width(1)
-        cr.set_source_rgb(0.15, 0.15, 0.15)
+        cr.set_line_width(2)
+        cr.set_source_rgb(0.3, 0.3, 0.3)
         do_path()
         cr.stroke()
 
