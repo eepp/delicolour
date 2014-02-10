@@ -39,3 +39,5 @@ class Colour:
     def from_hsv(h, s, v):
         c = Colour()
         c.set_hsv(h, s, v)
+
+        return c
