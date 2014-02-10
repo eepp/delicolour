@@ -27,6 +27,7 @@ class ScaleEntry(Gtk.HBox):
         self._entry.modify_font(Pango.FontDescription('monospace bold 9'))
         self._entry.set_width_chars(4)
         self._entry.connect('insert-text', self._on_entry_insert_text)
+        self._entry.connect('scroll-event', self._on_scroll_event)
         self._entry_changed_handler = None
         self._enable_entry_changed_event(True)
 
@@ -37,6 +38,7 @@ class ScaleEntry(Gtk.HBox):
         self._scale.set_draw_value(False)
         self._scale.set_min_slider_size(15)
         self._scale.connect('change-value', self._on_scale_change_value)
+        self._scale.connect('scroll-event', self._on_scroll_event)
         self._scale.set_can_focus(False)
 
         # hbox
@@ -96,8 +98,10 @@ class ScaleEntry(Gtk.HBox):
         self.set_value(next_val)
         self._user_on_change()
 
+    def _on_scroll_event(self, widget, ev):
+        pass
+
     def _on_scale_change_value(self, scale, scroll, value):
-        self.test4 = 'scale'
         self.set_value(value)
         self.set_focus()
 
