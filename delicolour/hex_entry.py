@@ -51,6 +51,11 @@ class HexEntry(ColourTextEntry):
 
     def set_lower(self, lower):
         self._lower = lower
+        if self._current_text_is_valid():
+            text = self.get_text().upper()
+            if lower:
+                text = text.lower()
+            self.set_text_no_emit(text)
 
     def set_copy_hash(self, copy_hash):
         self._copy_hash = copy_hash

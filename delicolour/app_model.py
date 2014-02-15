@@ -6,5 +6,7 @@ class AppModel:
     def get_default():
         model = AppModel()
         model.colour = Colour.from_rgb(255, 255, 255)
+        model.css_hex_copy_hash = True
+        model.css_hex_lower = True
 
         return model

@@ -25,9 +25,9 @@ class MainWindow(Gtk.Window):
     def _init_main_box(self):
         self._main_box = Gtk.VBox(spacing=config.MAIN_GUTTER_PX,
                                   homogeneous=False)
-        self._main_box.set_size_request(350, 0)
+        self._main_box.set_size_request(320, 0)
         self.add(self._main_box)
-        self._init_frames()
+        self._init_all()
 
     @staticmethod
     def _new_frame_box(label):
@@ -39,21 +39,9 @@ class MainWindow(Gtk.Window):
 
         return frame, vbox
 
-    def _init_frames(self):
-        # create frames
-        colour_frame, self._colour_box = MainWindow._new_frame_box('Colour')
-        settings_frame, self._settings_box = MainWindow._new_frame_box('Settings')
-
-        # pack them into the main box
-        self._main_box.pack_start(colour_frame, True, True, 0)
-        self._main_box.pack_start(settings_frame, True, True, 0)
-
-        # initialize them
-        self._init_colour_frame()
-
     def _init_big_colour(self):
         self._big_colour = BigColour()
-        self._colour_box.pack_start(self._big_colour, True, True, 0)
+        self._main_box.pack_start(self._big_colour, True, True, 0)
 
     @staticmethod
     def _new_fine_control_btn(img_filename, tooltip_text):
@@ -91,7 +79,7 @@ class MainWindow(Gtk.Window):
         box.pack_end(self._dec_sat, False, True, 0)
 
         # add to proper vbox
-        self._colour_box.pack_start(box, True, True, 0)
+        self._main_box.pack_start(box, True, True, 0)
 
     def _init_colour_controls(self):
         # build controls
@@ -113,15 +101,15 @@ class MainWindow(Gtk.Window):
         self._s_ctrl.on_change(self._update_model_from_hsv)
         self._v_ctrl.on_change(self._update_model_from_hsv)
 
-        self._colour_box.pack_start(self._r_ctrl, True, True, 0)
-        self._colour_box.pack_start(self._g_ctrl, True, True, 0)
-        self._colour_box.pack_start(self._b_ctrl, True, True, 0)
-        self._colour_box.pack_start(a, True, True, 0)
-        self._colour_box.pack_start(self._s_ctrl, True, True, 0)
-        self._colour_box.pack_start(self._v_ctrl, True, True, 0)
+        self._main_box.pack_start(self._r_ctrl, True, True, 0)
+        self._main_box.pack_start(self._g_ctrl, True, True, 0)
+        self._main_box.pack_start(self._b_ctrl, True, True, 0)
+        self._main_box.pack_start(a, True, True, 0)
+        self._main_box.pack_start(self._s_ctrl, True, True, 0)
+        self._main_box.pack_start(self._v_ctrl, True, True, 0)
 
     @staticmethod
-    def _new_css_hbox(label, entry):
+    def _new_css_entry_hbox(label, entry):
         # label
         lbl = Gtk.Label()
         lbl.modify_font(Pango.FontDescription('sans-serif bold 8'))
@@ -139,6 +127,23 @@ class MainWindow(Gtk.Window):
 
         return hbox
 
+    @staticmethod
+    def _new_bool_option_alignment(label):
+        # option
+        opt = Gtk.CheckButton(label=label)
+        opt.modify_font(Pango.FontDescription('sans-serif 8'))
+        color = Gdk.Color(red=config.TEXT_COLOUR_R * 65535,
+                          green=config.TEXT_COLOUR_G * 65535,
+                          blue=config.TEXT_COLOUR_B * 65535)
+        opt.modify_fg(Gtk.StateType.NORMAL, color)
+
+        # aligment for extra padding
+        opt_a = Gtk.Alignment()
+        opt_a.set_padding(0, 0, config.MAIN_GUTTER_PX, 0)
+        opt_a.add(opt)
+
+        return opt, opt_a
+
     def _init_css(self):
         # hex entry
         self._css_hex_entry = HexEntry()
@@ -149,18 +154,26 @@ class MainWindow(Gtk.Window):
         self._css_rgb_entry.on_change(self._update_model_from_css_rgb)
 
         # hboxes
-        css_hex_hbox = MainWindow._new_css_hbox('Hex: ', self._css_hex_entry)
-        css_rgb_hbox = MainWindow._new_css_hbox('RGB: ', self._css_rgb_entry)
+        css_hex_hbox = MainWindow._new_css_entry_hbox('Hex: ', self._css_hex_entry)
+        css_rgb_hbox = MainWindow._new_css_entry_hbox('RGB: ', self._css_rgb_entry)
+
+        # add options to hex box
+        self._css_hex_copy_hash_opt, a1 = MainWindow._new_bool_option_alignment('Copy #')
+        self._css_hex_copy_hash_opt_toggled_handler = self._css_hex_copy_hash_opt.connect('toggled', self._on_css_hex_copy_hash_toggled)
+        self._css_hex_lower_opt, a2 = MainWindow._new_bool_option_alignment('Lowercase')
+        self._css_hex_lower_opt_toggled_handler = self._css_hex_lower_opt.connect('toggled', self._on_css_hex_lower_toggled)
+        css_hex_hbox.pack_start(a1, False, False, 0)
+        css_hex_hbox.pack_start(a2, False, False, 0)
 
         # alignment for hex box
         css_hex_a = Gtk.Alignment()
         css_hex_a.set_padding(config.MAIN_GUTTER_PX, 0, 0, 0)
         css_hex_a.add(css_hex_hbox)
 
-        self._colour_box.pack_start(css_hex_a, True, True, 0)
-        self._colour_box.pack_start(css_rgb_hbox, True, True, 0)
+        self._main_box.pack_start(css_hex_a, True, True, 0)
+        self._main_box.pack_start(css_rgb_hbox, True, True, 0)
 
-    def _init_colour_frame(self):
+    def _init_all(self):
         # big colour
         self._init_big_colour()
 
@@ -172,6 +185,12 @@ class MainWindow(Gtk.Window):
 
         # hex
         self._init_css()
+
+    def _on_css_hex_copy_hash_toggled(self, btn):
+        self._update_model_from_settings()
+
+    def _on_css_hex_lower_toggled(self, btn):
+        self._update_model_from_settings()
 
     def _get_rgb_ctrl_values(self):
         r = self._r_ctrl.get_value()
@@ -214,6 +233,11 @@ class MainWindow(Gtk.Window):
         self._model.colour = colour
         self._update_view('css-rgb')
 
+    def _update_model_from_settings(self):
+        self._model.css_hex_copy_hash = self._css_hex_copy_hash_opt.get_active()
+        self._model.css_hex_lower = self._css_hex_lower_opt.get_active()
+        self._update_settings()
+
     def _update_big_colour(self):
         self._big_colour.set_colour(self._model.colour)
 
@@ -235,6 +259,19 @@ class MainWindow(Gtk.Window):
     def _update_css_rgb(self):
         self._css_rgb_entry.set_colour_no_emit(self._model.colour)
 
+    def _update_settings(self):
+        self._css_hex_copy_hash_opt.handler_block(self._css_hex_copy_hash_opt_toggled_handler)
+        self._css_hex_lower_opt.handler_block(self._css_hex_lower_opt_toggled_handler)
+
+        self._css_hex_copy_hash_opt.set_active(self._model.css_hex_copy_hash)
+        self._css_hex_lower_opt.set_active(self._model.css_hex_lower)
+
+        self._css_hex_copy_hash_opt.handler_unblock(self._css_hex_copy_hash_opt_toggled_handler)
+        self._css_hex_lower_opt.handler_unblock(self._css_hex_lower_opt_toggled_handler)
+
+        self._css_hex_entry.set_copy_hash(self._model.css_hex_copy_hash)
+        self._css_hex_entry.set_lower(self._model.css_hex_lower)
+
     def _update_view(self, focused_ctrl):
         self._update_big_colour()
         if focused_ctrl != 'hsv':
@@ -245,3 +282,4 @@ class MainWindow(Gtk.Window):
             self._update_css_hex()
         if focused_ctrl != 'css-rgb':
             self._update_css_rgb()
+        self._update_settings()
