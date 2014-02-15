@@ -42,15 +42,6 @@ class HexEntry(ColourTextEntry):
 
         return None
 
-    def _on_changed(self, editable):
-        text = self.get_text()
-        if len(text) not in [3, 6]:
-            # consider nothing changed
-            return
-
-        # notify user
-        self._do_user_on_change()
-
     def _get_real_text(self, text):
         text = text.upper()
         if self._lower:

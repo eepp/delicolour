@@ -3,6 +3,7 @@ from delicolour.app_model import AppModel
 from delicolour.scale_entry import ScaleEntry
 from delicolour.big_colour import BigColour
 from delicolour.hex_entry import HexEntry
+from delicolour.rgb_entry import RgbEntry
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
@@ -119,16 +120,13 @@ class MainWindow(Gtk.Window):
         self._colour_box.pack_start(self._s_ctrl, True, True, 0)
         self._colour_box.pack_start(self._v_ctrl, True, True, 0)
 
-    def _init_hex(self):
-        # entry
-        self._hex_entry = HexEntry()
-        self._hex_entry.on_change(self._update_model_from_hex)
-
+    @staticmethod
+    def _new_css_hbox(label, entry):
         # label
         lbl = Gtk.Label()
         lbl.modify_font(Pango.FontDescription('sans-serif bold 8'))
-        lbl.set_text('Hex: ')
-        lbl.set_alignment(1, 0.5)
+        lbl.set_text(label)
+        lbl.set_alignment(0, 0)
         color = Gdk.Color(red=config.TEXT_COLOUR_R * 65535,
                           green=config.TEXT_COLOUR_G * 65535,
                           blue=config.TEXT_COLOUR_B * 65535)
@@ -136,15 +134,31 @@ class MainWindow(Gtk.Window):
 
         # box
         hbox = Gtk.HBox(spacing=config.MAIN_GUTTER_PX, homogeneous=False)
-        hbox.pack_start(lbl, True, True, 0)
-        hbox.pack_start(self._hex_entry, False, True, 0)
+        hbox.pack_start(lbl, False, False, 0)
+        hbox.pack_start(entry, False, False, 0)
 
-        # build controls
-        a = Gtk.Alignment()
-        a.set_padding(config.MAIN_GUTTER_PX, 0, 0, 0)
-        a.add(hbox)
+        return hbox
 
-        self._colour_box.pack_start(a, True, True, 0)
+    def _init_css(self):
+        # hex entry
+        self._css_hex_entry = HexEntry()
+        self._css_hex_entry.on_change(self._update_model_from_css_hex)
+
+        # RGB entry
+        self._css_rgb_entry = RgbEntry()
+        self._css_rgb_entry.on_change(self._update_model_from_css_rgb)
+
+        # hboxes
+        css_hex_hbox = MainWindow._new_css_hbox('Hex: ', self._css_hex_entry)
+        css_rgb_hbox = MainWindow._new_css_hbox('RGB: ', self._css_rgb_entry)
+
+        # alignment for hex box
+        css_hex_a = Gtk.Alignment()
+        css_hex_a.set_padding(config.MAIN_GUTTER_PX, 0, 0, 0)
+        css_hex_a.add(css_hex_hbox)
+
+        self._colour_box.pack_start(css_hex_a, True, True, 0)
+        self._colour_box.pack_start(css_rgb_hbox, True, True, 0)
 
     def _init_colour_frame(self):
         # big colour
@@ -157,7 +171,7 @@ class MainWindow(Gtk.Window):
         self._init_colour_controls()
 
         # hex
-        self._init_hex()
+        self._init_css()
 
     def _get_rgb_ctrl_values(self):
         r = self._r_ctrl.get_value()
@@ -190,10 +204,15 @@ class MainWindow(Gtk.Window):
         self._model.colour.set_hsv(h, s, v)
         self._update_view('hsv')
 
-    def _update_model_from_hex(self):
-        colour = self._hex_entry.get_colour()
+    def _update_model_from_css_hex(self):
+        colour = self._css_hex_entry.get_colour()
         self._model.colour = colour
-        self._update_view('hex')
+        self._update_view('css-hex')
+
+    def _update_model_from_css_rgb(self):
+        colour = self._css_rgb_entry.get_colour()
+        self._model.colour = colour
+        self._update_view('css-rgb')
 
     def _update_big_colour(self):
         self._big_colour.set_colour(self._model.colour)
@@ -210,8 +229,11 @@ class MainWindow(Gtk.Window):
         self._s_ctrl.set_value_no_emit(s * 100)
         self._v_ctrl.set_value_no_emit(v * 100)
 
-    def _update_hex(self):
-        self._hex_entry.set_colour_no_emit(self._model.colour)
+    def _update_css_hex(self):
+        self._css_hex_entry.set_colour_no_emit(self._model.colour)
+
+    def _update_css_rgb(self):
+        self._css_rgb_entry.set_colour_no_emit(self._model.colour)
 
     def _update_view(self, focused_ctrl):
         self._update_big_colour()
@@ -219,5 +241,7 @@ class MainWindow(Gtk.Window):
             self._update_hsv_ctrls()
         if focused_ctrl != 'rgb':
             self._update_rgb_ctrls()
-        if focused_ctrl != 'hex':
-            self._update_hex()
+        if focused_ctrl != 'css-hex':
+            self._update_css_hex()
+        if focused_ctrl != 'css-rgb':
+            self._update_css_rgb()

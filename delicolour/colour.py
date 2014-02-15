@@ -1,3 +1,4 @@
+import re
 from colormath.color_objects import RGBColor
 from colormath.color_objects import HSVColor
 
@@ -33,6 +34,7 @@ class Colour:
         return '{:02x}{:02x}{:02x}'.format(r, g, b)
 
     def set_hex(self, hex_str):
+        hex_str = hex_str.strip()
         if len(hex_str) == 3:
             hex_str = '{r}{r}{g}{g}{b}{b}'.format(r=hex_str[0],
                                                    g=hex_str[1],
@@ -41,6 +43,33 @@ class Colour:
             return
         self._rgb_color.set_from_rgb_hex(hex_str)
         self._update_hsv_from_rgb()
+
+    @staticmethod
+    def _rgb_in_range(r, g, b):
+        good = True
+        for val in [r, g, b]:
+            good &= (val >= 0 and val <= 255)
+
+        return good
+
+    def set_css_rgb(self, rgb_str):
+        rgb_str = rgb_str.strip()
+        print(rgb_str)
+        m = re.match(r'^rgb\s*\(\s*(\d+)\s*\,\s*(\d+)\s*\,\s*(\d+)\s*\)$', rgb_str)
+        if not m:
+            return
+        print('match!')
+        r = int(m.group(1))
+        g = int(m.group(2))
+        b = int(m.group(3))
+        if not Colour._rgb_in_range(r, g, b):
+            return
+
+        self.set_rgb(r, g, b)
+
+    def get_css_rgb(self):
+        r, g, b = self.get_rgb()
+        return 'rgb({}, {}, {})'.format(r, g, b)
 
     @staticmethod
     def from_rgb(r, g, b):
@@ -62,3 +91,11 @@ class Colour:
         c.set_hex(hex_str)
 
         return c
+
+    @staticmethod
+    def from_css_rgb(rgb_str):
+        c = Colour()
+        c.set_css_rgb(rgb_str)
+
+        return c
+

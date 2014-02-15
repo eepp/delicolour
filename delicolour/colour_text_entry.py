@@ -62,12 +62,10 @@ class ColourTextEntry(Gtk.Entry):
     def _on_paste(self, entry):
         text = self._get_clipboard()
         if text is not None:
-            txt = self._get_clipboard()
-            if txt is not None:
-                self.set_text_no_emit(text)
+            self.set_text_no_emit(text)
 
-                # notify user
-                self._do_user_on_change()
+            # notify user
+            self._do_user_on_change()
         self.stop_emission('paste-clipboard')
 
     def get_colour(self):
