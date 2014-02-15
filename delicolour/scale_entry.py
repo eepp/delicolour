@@ -26,10 +26,10 @@ class ScaleEntry(Gtk.HBox):
         self._entry = Gtk.Entry()
         self._entry.modify_font(Pango.FontDescription('monospace bold 9'))
         self._entry.set_width_chars(4)
+        self._entry.add_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.SMOOTH_SCROLL_MASK)
         self._entry.connect('insert-text', self._on_entry_insert_text)
         self._entry.connect('scroll-event', self._on_entry_scroll_event)
         self._entry_changed_handler = self._entry.connect('changed', self._on_entry_changed)
-
 
         # scale
         adjustment = Gtk.Adjustment(0, minval, maxval, 1, page_incr, 0)
@@ -50,17 +50,17 @@ class ScaleEntry(Gtk.HBox):
         self.pack_start(self._entry, False, True, 0)
 
         # user on change
-        self._user_on_change = ScaleEntry.do_nothing
-
-    @staticmethod
-    def do_nothing():
-        pass
+        self._user_on_change = None
 
     def set_page_incr(self, page_incr):
         self._page_incr = page_incr
         ajd = self._scale.get_adjustment()
         ajd.set_page_increment(page_incr)
         self._scale.set_adjustment(ajd)
+
+    def _do_user_on_change(self):
+        if self._user_on_change:
+            self._user_on_change()
 
     def _get_normalized_value(self, value):
         if value < self._minval:
@@ -81,10 +81,13 @@ class ScaleEntry(Gtk.HBox):
         self._entry.set_text(txt)
         self._entry.handler_unblock(self._entry_changed_handler)
 
-    def set_value_no_emit(self, value):
+    def _set_ctrl_values_no_emit(self, value):
         value = self._get_normalized_value(value)
         self._set_entry_value_no_emit(value)
         self._set_scale_value_no_emit(value)
+
+    def set_value_no_emit(self, value):
+        self._set_ctrl_values_no_emit(value)
 
     def get_value(self):
         return self._scale.get_value()
@@ -107,15 +110,22 @@ class ScaleEntry(Gtk.HBox):
         self._set_scale_value_no_emit(next_val)
 
         # notify user
-        self._user_on_change()
+        self._do_user_on_change()
 
     def _on_entry_scroll_event(self, widget, ev):
-        print(ev)
+        value = self.get_value()
+        if ev.get_scroll_deltas()[2] < 0:
+            value -= self._page_incr
+        else:
+            value += self._page_incr
+
+        # set control values
+        self._set_ctrl_values_no_emit(value)
+
+        # notify user
+        self._do_user_on_change()
 
     def _on_scale_change_value(self, scale, scroll, value):
-        print(value)
-        print(scroll)
-
         # value
         value = self._get_normalized_value(value)
 
@@ -126,7 +136,7 @@ class ScaleEntry(Gtk.HBox):
         self._set_entry_value_no_emit(value)
 
         # notify user
-        self._user_on_change()
+        self._do_user_on_change()
 
         return True
 
