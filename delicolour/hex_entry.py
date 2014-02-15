@@ -82,12 +82,12 @@ class HexEntry(Gtk.Entry):
         return Colour.from_hex(self.get_text())
 
     def set_colour_no_emit(self, colour):
-        text = colour.get_hex().upper()
-        if self._lower:
-            text = text.lower()
-        self.set_text_no_emit(text)
+        self.set_text_no_emit(colour.get_hex())
 
     def set_text_no_emit(self, text):
+        text = text.upper()
+        if self._lower:
+            text = text.lower()
         self.handler_block(self._changed_handler)
         self.set_text(text)
         self.handler_unblock(self._changed_handler)
