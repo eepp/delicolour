@@ -21,6 +21,7 @@ class MainWindow(Gtk.Window):
     def _init_main_box(self):
         self._main_box = Gtk.VBox(spacing=config.MAIN_GUTTER_PX,
                                   homogeneous=False)
+        self._main_box.set_size_request(350, 0)
         self.add(self._main_box)
         self._init_frames()
 

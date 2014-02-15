@@ -4,7 +4,7 @@ from gi.repository import Gtk
 
 
 class BigColour(Gtk.DrawingArea):
-    def __init__(self, border_radius=8):
+    def __init__(self, border_radius=8, height=75):
         # initial colour is black
         self._colour = Colour.from_rgb(0, 0, 0)
 
@@ -13,7 +13,7 @@ class BigColour(Gtk.DrawingArea):
 
         # initialize drawing area
         Gtk.DrawingArea.__init__(self)
-        self.set_size_request(350, 75)
+        self.set_size_request(0, height)
         self.connect('draw', self._on_draw)
 
     def _get_size(self):
