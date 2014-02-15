@@ -29,16 +29,6 @@ class MainWindow(Gtk.Window):
         self.add(self._main_box)
         self._init_all()
 
-    @staticmethod
-    def _new_frame_box(label):
-        frame = Gtk.Frame(label=label)
-        frame.set_shadow_type(Gtk.ShadowType.IN)
-        vbox = Gtk.VBox(spacing=config.MAIN_GUTTER_PX, homogeneous=False)
-        vbox.set_border_width(config.MAIN_GUTTER_PX)
-        frame.add(vbox);
-
-        return frame, vbox
-
     def _init_big_colour(self):
         self._big_colour = BigColour()
         self._main_box.pack_start(self._big_colour, True, True, 0)
