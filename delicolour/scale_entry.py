@@ -6,14 +6,14 @@ from gi.repository import Pango
 
 
 class ScaleEntry(Gtk.HBox):
-    def __init__(self, label, minval, maxval, step, r=0.15, g=0.15, b=0.15):
+    def __init__(self, label, minval, maxval, page_incr, r=0.15, g=0.15, b=0.15):
         # asked colour
         color = Gdk.Color(red=r * 65535, green=g * 65535, blue=b * 65535)
 
         # parameters
         self._minval = minval
         self._maxval = maxval
-        self._step = step
+        self._page_incr = page_incr
 
         # label
         lbl = Gtk.Label()
@@ -27,19 +27,20 @@ class ScaleEntry(Gtk.HBox):
         self._entry.modify_font(Pango.FontDescription('monospace bold 9'))
         self._entry.set_width_chars(4)
         self._entry.connect('insert-text', self._on_entry_insert_text)
-        self._entry.connect('scroll-event', self._on_scroll_event)
-        self._entry_changed_handler = None
-        self._enable_entry_changed_event(True)
+        self._entry.connect('scroll-event', self._on_entry_scroll_event)
+        self._entry_changed_handler = self._entry.connect('changed', self._on_entry_changed)
+
 
         # scale
-        adjustment = Gtk.Adjustment(0, minval, maxval, step, 0, 0)
+        adjustment = Gtk.Adjustment(0, minval, maxval, 1, page_incr, 0)
         self._scale = Gtk.HScale()
         self._scale.set_adjustment(adjustment)
         self._scale.set_draw_value(False)
         self._scale.set_min_slider_size(15)
         self._scale.connect('change-value', self._on_scale_change_value)
-        self._scale.connect('scroll-event', self._on_scroll_event)
         self._scale.set_can_focus(False)
+        self._scale.set_round_digits(0)
+        self._scale.set_digits(0)
 
         # hbox
         Gtk.HBox.__init__(self, spacing=config.MAIN_GUTTER_PX,
@@ -55,30 +56,35 @@ class ScaleEntry(Gtk.HBox):
     def do_nothing():
         pass
 
-    def _enable_entry_changed_event(self, en):
-        if en:
-            if self._entry_changed_handler is None:
-                self._entry_changed_handler = self._entry.connect('changed', self._on_entry_changed)
-        else:
-            if self._entry_changed_handler is not None:
-                self._entry.disconnect(self._entry_changed_handler)
-                self._entry_changed_handler = None
+    def set_page_incr(self, page_incr):
+        self._page_incr = page_incr
+        ajd = self._scale.get_adjustment()
+        ajd.set_page_increment(page_incr)
+        self._scale.set_adjustment(ajd)
 
-    def set_value(self, value):
+    def _get_normalized_value(self, value):
         if value < self._minval:
-            value = self._minval
+            return self._minval
         elif value > self._maxval:
-            value = self._maxval
+            return self._maxval
         elif value is None:
-            value = self.get_value()
+            return self.get_value()
+        else:
+            return value
 
+    def _set_scale_value_no_emit(self, value):
         self._scale.set_value(value)
-        self._entry.set_text(str(int(value)))
 
-    def set_value_no_events(self, value):
-        self._enable_entry_changed_event(False)
-        self.set_value(value)
-        self._enable_entry_changed_event(True)
+    def _set_entry_value_no_emit(self, value):
+        txt = str(round(value))
+        self._entry.handler_block(self._entry_changed_handler)
+        self._entry.set_text(txt)
+        self._entry.handler_unblock(self._entry_changed_handler)
+
+    def set_value_no_emit(self, value):
+        value = self._get_normalized_value(value)
+        self._set_entry_value_no_emit(value)
+        self._set_scale_value_no_emit(value)
 
     def get_value(self):
         return self._scale.get_value()
@@ -89,21 +95,38 @@ class ScaleEntry(Gtk.HBox):
             self._entry.stop_emission('insert-text')
 
     def _on_entry_changed(self, editable):
-        print('changed! {}'.format(self._label))
         text = self._entry.get_text()
         if len(text) == 0:
             # consider nothing changed
             return
-        next_val = int(text)
-        self.set_value(next_val)
+
+        # value
+        next_val = self._get_normalized_value(int(text))
+
+        # set scale value
+        self._set_scale_value_no_emit(next_val)
+
+        # notify user
         self._user_on_change()
 
-    def _on_scroll_event(self, widget, ev):
-        pass
+    def _on_entry_scroll_event(self, widget, ev):
+        print(ev)
 
     def _on_scale_change_value(self, scale, scroll, value):
-        self.set_value(value)
-        self.set_focus()
+        print(value)
+        print(scroll)
+
+        # value
+        value = self._get_normalized_value(value)
+
+        # set scale value
+        self._set_scale_value_no_emit(value)
+
+        # set entry value
+        self._set_entry_value_no_emit(value)
+
+        # notify user
+        self._user_on_change()
 
         return True
 

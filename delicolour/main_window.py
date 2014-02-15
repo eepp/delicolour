@@ -161,15 +161,15 @@ class MainWindow(Gtk.Window):
 
     def _update_rgb_ctrls(self):
         r, g, b = self._model.colour.get_rgb()
-        self._r_ctrl.set_value_no_events(r)
-        self._g_ctrl.set_value_no_events(g)
-        self._b_ctrl.set_value_no_events(b)
+        self._r_ctrl.set_value_no_emit(r)
+        self._g_ctrl.set_value_no_emit(g)
+        self._b_ctrl.set_value_no_emit(b)
 
     def _update_hsv_ctrls(self):
         h, s, v = self._model.colour.get_hsv()
-        self._h_ctrl.set_value_no_events(h)
-        self._s_ctrl.set_value_no_events(s * 100)
-        self._v_ctrl.set_value_no_events(v * 100)
+        self._h_ctrl.set_value_no_emit(h)
+        self._s_ctrl.set_value_no_emit(s * 100)
+        self._v_ctrl.set_value_no_emit(v * 100)
 
     def _update_view(self, focused_ctrl):
         self._update_big_colour()
