@@ -24,8 +24,9 @@ class ScaleEntry(Gtk.HBox):
 
         # entry
         self._entry = Gtk.Entry()
-        self._entry.modify_font(Pango.FontDescription('monospace bold 9'))
-        self._entry.set_width_chars(4)
+        self._entry.modify_font(Pango.FontDescription('monospace bold 8'))
+        self._entry.set_width_chars(3)
+        self._entry.set_alignment(1)
         self._entry.add_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.SMOOTH_SCROLL_MASK)
         self._entry.connect('insert-text', self._on_entry_insert_text)
         self._entry.connect('scroll-event', self._on_entry_scroll_event)
