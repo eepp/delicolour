@@ -6,7 +6,7 @@ from gi.repository import Pango
 
 
 class ScaleEntry(Gtk.HBox):
-    def __init__(self, label, minval, maxval, page_incr, r=0.15, g=0.15, b=0.15):
+    def __init__(self, label, minval, maxval, page_incr, r=0.15, g=0.15, b=0.15, wrap=False):
         # asked colour
         color = Gdk.Color(red=r * 65535, green=g * 65535, blue=b * 65535)
 
@@ -14,6 +14,7 @@ class ScaleEntry(Gtk.HBox):
         self._minval = minval
         self._maxval = maxval
         self._page_incr = page_incr
+        self._wrap = wrap
 
         # label
         lbl = Gtk.Label()
@@ -64,6 +65,11 @@ class ScaleEntry(Gtk.HBox):
             self._user_on_change()
 
     def _get_normalized_value(self, value):
+        if value is None:
+            value = self.get_value()
+        value = int(value)
+
+        # clip?
         if value < self._minval:
             return self._minval
         elif value > self._maxval:
@@ -105,7 +111,7 @@ class ScaleEntry(Gtk.HBox):
             return
 
         # value
-        next_val = self._get_normalized_value(int(text))
+        next_val = self._get_normalized_value(round(float(text)))
 
         # set scale value
         self._set_scale_value_no_emit(next_val)
@@ -119,6 +125,10 @@ class ScaleEntry(Gtk.HBox):
             value -= self._page_incr
         else:
             value += self._page_incr
+
+        # wrap?
+        if self._wrap:
+            value = (value % (self._maxval + 1 - self._minval)) + self._minval
 
         # set control values
         self._set_ctrl_values_no_emit(value)

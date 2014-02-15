@@ -94,7 +94,7 @@ class MainWindow(Gtk.Window):
         self._r_ctrl = ScaleEntry('R', 0, 255, 1, 1, 0.1, 0.3)
         self._g_ctrl = ScaleEntry('G', 0, 255, 1, 0, 0.5, 0)
         self._b_ctrl = ScaleEntry('B', 0, 255, 1, 0, 0.5, 1)
-        self._h_ctrl = ScaleEntry('H', 0, 360, 1)
+        self._h_ctrl = ScaleEntry('H', 0, 359, 1, wrap=True)
         self._s_ctrl = ScaleEntry('S', 0, 100, 1)
         self._v_ctrl = ScaleEntry('V', 0, 100, 1)
         a = Gtk.Alignment()
