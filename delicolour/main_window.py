@@ -10,7 +10,7 @@ class MainWindow(Gtk.Window):
         Gtk.Window.__init__(self, title="delicolour")
         self._make_me_nice()
         self._init_main_box()
-        self._model = AppModel()
+        self._model = AppModel.get_default()
         self._update_view('init')
 
     def _make_me_nice(self):

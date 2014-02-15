@@ -2,5 +2,9 @@ from delicolour.colour import Colour
 
 
 class AppModel:
-    def __init__(self):
-        self.colour = Colour.from_rgb(255, 255, 255)
+    @staticmethod
+    def get_default():
+        model = AppModel()
+        model.colour = Colour.from_rgb(255, 255, 255)
+
+        return model
