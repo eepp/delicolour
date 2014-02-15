@@ -22,11 +22,25 @@ class Colour:
 
     def get_rgb(self):
         c = self._rgb_color
-        return c.rgb_r, c.rgb_g, c.rgb_b
+        return int(c.rgb_r), int(c.rgb_g), int(c.rgb_b)
 
     def get_hsv(self):
         c = self._hsv_color
         return c.hsv_h, c.hsv_s, c.hsv_v
+
+    def get_hex(self):
+        r, g, b = self.get_rgb()
+        return '{:02x}{:02x}{:02x}'.format(r, g, b)
+
+    def set_hex(self, hex_str):
+        if len(hex_str) == 3:
+            hex_str = '{r}{r}{g}{g}{b}{b}'.format(r=hex_str[0],
+                                                   g=hex_str[1],
+                                                   b=hex_str[2])
+        if len(hex_str) != 6:
+            return
+        self._rgb_color.set_from_rgb_hex(hex_str)
+        self._update_hsv_from_rgb()
 
     @staticmethod
     def from_rgb(r, g, b):
@@ -39,5 +53,12 @@ class Colour:
     def from_hsv(h, s, v):
         c = Colour()
         c.set_hsv(h, s, v)
+
+        return c
+
+    @staticmethod
+    def from_hex(hex_str):
+        c = Colour()
+        c.set_hex(hex_str)
 
         return c

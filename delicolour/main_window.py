@@ -2,7 +2,10 @@ from delicolour import config
 from delicolour.app_model import AppModel
 from delicolour.scale_entry import ScaleEntry
 from delicolour.big_colour import BigColour
+from delicolour.hex_entry import HexEntry
 from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Pango
 
 
 class MainWindow(Gtk.Window):
@@ -116,6 +119,33 @@ class MainWindow(Gtk.Window):
         self._colour_box.pack_start(self._s_ctrl, True, True, 0)
         self._colour_box.pack_start(self._v_ctrl, True, True, 0)
 
+    def _init_hex(self):
+        # entry
+        self._hex_entry = HexEntry()
+        self._hex_entry.on_change(self._update_model_from_hex)
+
+        # label
+        lbl = Gtk.Label()
+        lbl.modify_font(Pango.FontDescription('sans-serif bold 8'))
+        lbl.set_text('Hex: ')
+        lbl.set_alignment(1, 0.5)
+        color = Gdk.Color(red=config.TEXT_COLOUR_R * 65535,
+                          green=config.TEXT_COLOUR_G * 65535,
+                          blue=config.TEXT_COLOUR_B * 65535)
+        lbl.modify_fg(Gtk.StateType.NORMAL, color)
+
+        # box
+        hbox = Gtk.HBox(spacing=config.MAIN_GUTTER_PX, homogeneous=False)
+        hbox.pack_start(lbl, True, True, 0)
+        hbox.pack_start(self._hex_entry, False, True, 0)
+
+        # build controls
+        a = Gtk.Alignment()
+        a.set_padding(config.MAIN_GUTTER_PX, 0, 0, 0)
+        a.add(hbox)
+
+        self._colour_box.pack_start(a, True, True, 0)
+
     def _init_colour_frame(self):
         # big colour
         self._init_big_colour()
@@ -125,6 +155,9 @@ class MainWindow(Gtk.Window):
 
         # colour controls
         self._init_colour_controls()
+
+        # hex
+        self._init_hex()
 
     def _get_rgb_ctrl_values(self):
         r = self._r_ctrl.get_value()
@@ -157,6 +190,11 @@ class MainWindow(Gtk.Window):
         self._model.colour.set_hsv(h, s, v)
         self._update_view('hsv')
 
+    def _update_model_from_hex(self):
+        colour = self._hex_entry.get_colour()
+        self._model.colour = colour
+        self._update_view('hex')
+
     def _update_big_colour(self):
         self._big_colour.set_colour(self._model.colour)
 
@@ -172,9 +210,14 @@ class MainWindow(Gtk.Window):
         self._s_ctrl.set_value_no_emit(s * 100)
         self._v_ctrl.set_value_no_emit(v * 100)
 
+    def _update_hex(self):
+        self._hex_entry.set_colour_no_emit(self._model.colour)
+
     def _update_view(self, focused_ctrl):
         self._update_big_colour()
         if focused_ctrl != 'hsv':
             self._update_hsv_ctrls()
         if focused_ctrl != 'rgb':
             self._update_rgb_ctrls()
+        if focused_ctrl != 'hex':
+            self._update_hex()

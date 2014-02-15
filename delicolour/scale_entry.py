@@ -6,7 +6,9 @@ from gi.repository import Pango
 
 
 class ScaleEntry(Gtk.HBox):
-    def __init__(self, label, minval, maxval, page_incr, r=0.15, g=0.15, b=0.15, wrap=False):
+    def __init__(self, label, minval, maxval, page_incr,
+                 r=config.TEXT_COLOUR_R, g=config.TEXT_COLOUR_G,
+                 b=config.TEXT_COLOUR_B, wrap=False):
         # asked colour
         color = Gdk.Color(red=r * 65535, green=g * 65535, blue=b * 65535)
 
@@ -15,16 +17,19 @@ class ScaleEntry(Gtk.HBox):
         self._maxval = maxval
         self._page_incr = page_incr
         self._wrap = wrap
+        self._user_on_change = None
 
         # label
         lbl = Gtk.Label()
-        lbl.set_width_chars(2)
-        lbl.set_markup('<b>{}</b>'.format(label))
+        lbl.modify_font(Pango.FontDescription('sans-serif bold 8'))
+        lbl.set_width_chars(1)
+        lbl.set_text(label)
         lbl.modify_fg(Gtk.StateType.NORMAL, color)
         self._label = label
 
         # entry
         self._entry = Gtk.Entry()
+        self._entry.set_max_length(3)
         self._entry.modify_font(Pango.FontDescription('monospace bold 8'))
         self._entry.set_width_chars(3)
         self._entry.set_alignment(1)
@@ -50,9 +55,6 @@ class ScaleEntry(Gtk.HBox):
         self.pack_start(lbl, False, True, 0)
         self.pack_start(self._scale, True, True, 0)
         self.pack_start(self._entry, False, True, 0)
-
-        # user on change
-        self._user_on_change = None
 
     def set_page_incr(self, page_incr):
         self._page_incr = page_incr
