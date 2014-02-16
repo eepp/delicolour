@@ -116,6 +116,7 @@ class MainWindow(Gtk.Window):
         lbl.modify_font(Pango.FontDescription('sans-serif bold 8'))
         lbl.set_text(label)
         lbl.set_alignment(0, 0)
+        lbl.set_width_chars(5)
         color = Gdk.Color(red=config.TEXT_COLOUR_R * 65535,
                           green=config.TEXT_COLOUR_G * 65535,
                           blue=config.TEXT_COLOUR_B * 65535)
@@ -155,8 +156,8 @@ class MainWindow(Gtk.Window):
         self._css_rgb_entry.on_change(self._update_model_from_css_rgb)
 
         # hboxes
-        css_hex_hbox = MainWindow._new_css_entry_hbox('Hex: ', self._css_hex_entry)
-        css_rgb_hbox = MainWindow._new_css_entry_hbox('RGB: ', self._css_rgb_entry)
+        css_hex_hbox = MainWindow._new_css_entry_hbox('Hex:', self._css_hex_entry)
+        css_rgb_hbox = MainWindow._new_css_entry_hbox('RGB:', self._css_rgb_entry)
 
         # add options to hex box
         self._css_hex_copy_hash_opt, a1 = MainWindow._new_bool_option_alignment('Copy #')
