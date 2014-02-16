@@ -4,7 +4,7 @@ delicolour
 **delicolour** is a lightweight colour finder. It's written in Python using
 PyGObject (i.e. GTK). It has only been tested on Linux.
 
-![delicolour screenshot](http://0x3b.org/ss/legman370.png)
+![delicolour screenshot](http://0x3b.org/ss/oopack386.png)
 
 (I don't have any GTK theme so it could look better with your setup).
 
@@ -26,6 +26,7 @@ features
 * HSV values (0 to 359 for hue and 0 to 100 for saturation and value)
 * scrollable sliders and entries (hue wraps)
 * fine colour adjustment buttons (increase/decrease saturation/lightness)
+  with adjustable increment value
 * hex and RGB CSS strings
 * intelligent copy/paste (paste `#rrggbb` or `rrggbb` into the hex entry
   and decide if you want to prepend the `#` sign when copying)
@@ -67,4 +68,3 @@ todo
 
 * colour picker for whole display
 * secondary colour
-* adjustable increment for fine saturation/lightness buttons

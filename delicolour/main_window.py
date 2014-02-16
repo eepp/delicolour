@@ -20,7 +20,7 @@ class MainWindow(Gtk.Window):
 
     def _make_me_nice(self):
         self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_border_width(config.MAIN_GUTTER_PX)
+        self.set_border_width(config.MAIN_GUTTER_PX * 1.5)
         self.set_resizable(False)
 
     def _init_main_box(self):
@@ -36,7 +36,8 @@ class MainWindow(Gtk.Window):
 
     def _init_fine_colour_controls(self):
         # fine controls
-        fine_controls = FineControls(1, 10)
+        fine_controls = FineControls(config.INCR_SPINNER_MIN_VAL,
+                                     config.INCR_SPINNER_MAX_VAL)
         self._main_box.pack_start(fine_controls, True, True, 0)
 
         # set callbacks
@@ -162,20 +163,20 @@ class MainWindow(Gtk.Window):
     def _on_css_hex_lower_toggled(self, btn):
         self._update_model_from_settings()
 
-    def _on_inc_light(self):
-        self._model.colour.inc_light(self._model.fine_incr)
+    def _on_inc_light(self, incr):
+        self._model.colour.inc_light(incr / 100)
         self._update_view('fine')
 
-    def _on_dec_light(self):
-        self._model.colour.dec_light(self._model.fine_incr)
+    def _on_dec_light(self, incr):
+        self._model.colour.dec_light(incr / 100)
         self._update_view('fine')
 
-    def _on_inc_sat(self):
-        self._model.colour.inc_sat(self._model.fine_incr)
+    def _on_inc_sat(self, incr):
+        self._model.colour.inc_sat(incr / 100)
         self._update_view('fine')
 
-    def _on_dec_sat(self):
-        self._model.colour.dec_sat(self._model.fine_incr)
+    def _on_dec_sat(self, incr):
+        self._model.colour.dec_sat(incr / 100)
         self._update_view('fine')
 
     def _get_rgb_ctrl_values(self):
