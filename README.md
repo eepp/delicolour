@@ -11,7 +11,7 @@ PyGObject (i.e. GTK). It has only been tested on Linux.
 My goal here is to have a straightforward interface for choosing a colour
 (mainly for Web design), not as advanced as
 [gpick](https://code.google.com/p/gpick/), but still useful and very fluid.
-The main core principle is: no tabs or other windows: everything accessible
+The main core principle is: no tabs or other windows, everything accessible
 from the main window.
 
 This project is also a pretext for trying PyGObject.
