@@ -1,6 +1,7 @@
 import re
 from colormath.color_objects import RGBColor
 from colormath.color_objects import HSVColor
+from colormath.color_objects import HSLColor
 
 
 class Colour:
@@ -43,6 +44,42 @@ class Colour:
             return
         self._rgb_color.set_from_rgb_hex(hex_str)
         self._update_hsv_from_rgb()
+
+    def inc_light(self, val):
+        hsl = self._hsv_color.convert_to('hsl')
+        light = hsl.hsl_l
+        light += val
+        if light > 1:
+            light = 1
+        hsl.hsl_l = light
+        self._hsv_color = hsl.convert_to('hsv')
+        self._update_rgb_from_hsv()
+
+    def dec_light(self, val):
+        hsl = self._hsv_color.convert_to('hsl')
+        light = hsl.hsl_l
+        light -= val
+        if light < 0:
+            light = 0
+        hsl.hsl_l = light
+        self._hsv_color = hsl.convert_to('hsv')
+        self._update_rgb_from_hsv()
+
+    def inc_sat(self, val):
+        sat = self._hsv_color.hsv_s
+        sat += val
+        if sat > 1:
+            sat = 1
+        self._hsv_color.hsv_s = sat
+        self._update_rgb_from_hsv()
+
+    def dec_sat(self, val):
+        sat = self._hsv_color.hsv_s
+        sat -= val
+        if sat < 0:
+            sat = 0
+        self._hsv_color.hsv_s = sat
+        self._update_rgb_from_hsv()
 
     @staticmethod
     def _rgb_in_range(r, g, b):

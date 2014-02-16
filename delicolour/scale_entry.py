@@ -22,7 +22,7 @@ class ScaleEntry(Gtk.HBox):
         # label
         lbl = Gtk.Label()
         lbl.modify_font(Pango.FontDescription('sans-serif bold 8'))
-        lbl.set_width_chars(1)
+        lbl.set_width_chars(2)
         lbl.set_text(label)
         lbl.modify_fg(Gtk.StateType.NORMAL, color)
         self._label = label

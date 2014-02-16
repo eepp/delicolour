@@ -54,6 +54,12 @@ class MainWindow(Gtk.Window):
         self._dec_sat = MainWindow._new_fine_control_btn('res/desat-24.png',
                                                          'Decrease saturation')
 
+        # set callbacks
+        self._inc_light.connect('clicked', self._on_inc_light_clicked)
+        self._dec_light.connect('clicked', self._on_dec_light_clicked)
+        self._inc_sat.connect('clicked', self._on_inc_sat_clicked)
+        self._dec_sat.connect('clicked', self._on_dec_sat_clicked)
+
         # alignments
         a_pad_left = Gtk.Alignment()
         a_pad_left.set_padding(0, 0, config.MAIN_GUTTER_PX, 0)
@@ -181,6 +187,22 @@ class MainWindow(Gtk.Window):
 
     def _on_css_hex_lower_toggled(self, btn):
         self._update_model_from_settings()
+
+    def _on_inc_light_clicked(self, btn):
+        self._model.colour.inc_light(self._model.fine_incr)
+        self._update_view('fine')
+
+    def _on_dec_light_clicked(self, btn):
+        self._model.colour.dec_light(self._model.fine_incr)
+        self._update_view('fine')
+
+    def _on_inc_sat_clicked(self, btn):
+        self._model.colour.inc_sat(self._model.fine_incr)
+        self._update_view('fine')
+
+    def _on_dec_sat_clicked(self, btn):
+        self._model.colour.dec_sat(self._model.fine_incr)
+        self._update_view('fine')
 
     def _get_rgb_ctrl_values(self):
         r = self._r_ctrl.get_value()
