@@ -123,9 +123,10 @@ class ScaleEntry(Gtk.HBox):
 
     def _on_entry_scroll_event(self, widget, ev):
         value = self.get_value()
-        if ev.get_scroll_deltas()[2] < 0:
+        y_scroll = ev.get_scroll_deltas()[2]
+        if y_scroll < 0:
             value -= self._page_incr
-        else:
+        elif y_scroll > 0:
             value += self._page_incr
 
         # wrap?

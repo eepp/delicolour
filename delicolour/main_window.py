@@ -45,7 +45,7 @@ class MainWindow(Gtk.Window):
         self._fine_controls.on_dec_light(self._on_dec_light)
         self._fine_controls.on_inc_sat(self._on_inc_sat)
         self._fine_controls.on_dec_sat(self._on_dec_sat)
-        self._fine_controls.on_incr_change(self._on_incr_change)
+        self._fine_controls.on_incr_change(self._update_model_from_incr)
 
     def _init_colour_controls(self):
         # build controls
@@ -180,10 +180,10 @@ class MainWindow(Gtk.Window):
         self._model.colour.dec_sat(self._model.fine_incr / 100)
         self._update_view('fine')
 
-    def _on_incr_change(self):
+    def _update_model_from_incr(self):
         incr = self._fine_controls.get_incr_value()
         self._model.fine_incr = incr
-        self._update_view('fine-incr')
+        self._update_all_incr()
 
     def _get_rgb_ctrl_values(self):
         r = self._r_ctrl.get_value()
@@ -268,6 +268,14 @@ class MainWindow(Gtk.Window):
         self._css_hex_entry.set_copy_hash(self._model.css_hex_copy_hash)
         self._css_hex_entry.set_lower(self._model.css_hex_lower)
 
+    def _update_all_incr(self):
+        self._r_ctrl.set_page_incr(self._model.fine_incr)
+        self._g_ctrl.set_page_incr(self._model.fine_incr)
+        self._b_ctrl.set_page_incr(self._model.fine_incr)
+        self._h_ctrl.set_page_incr(self._model.fine_incr)
+        self._s_ctrl.set_page_incr(self._model.fine_incr)
+        self._v_ctrl.set_page_incr(self._model.fine_incr)
+
     def _update_view(self, focused_ctrl):
         self._update_big_colour()
         if focused_ctrl != 'hsv':
@@ -280,5 +288,6 @@ class MainWindow(Gtk.Window):
             self._update_css_rgb()
         if focused_ctrl != 'fine-incr':
             self._update_fine_incr()
-
-        self._update_settings()
+        if focused_ctrl == 'init':
+            self._update_settings()
+            self._update_all_incr()
