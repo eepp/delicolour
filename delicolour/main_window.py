@@ -36,15 +36,16 @@ class MainWindow(Gtk.Window):
 
     def _init_fine_colour_controls(self):
         # fine controls
-        fine_controls = FineControls(config.INCR_SPINNER_MIN_VAL,
+        self._fine_controls = FineControls(config.INCR_SPINNER_MIN_VAL,
                                      config.INCR_SPINNER_MAX_VAL)
-        self._main_box.pack_start(fine_controls, True, True, 0)
+        self._main_box.pack_start(self._fine_controls, True, True, 0)
 
         # set callbacks
-        fine_controls.on_inc_light(self._on_inc_light)
-        fine_controls.on_dec_light(self._on_dec_light)
-        fine_controls.on_inc_sat(self._on_inc_sat)
-        fine_controls.on_dec_sat(self._on_dec_sat)
+        self._fine_controls.on_inc_light(self._on_inc_light)
+        self._fine_controls.on_dec_light(self._on_dec_light)
+        self._fine_controls.on_inc_sat(self._on_inc_sat)
+        self._fine_controls.on_dec_sat(self._on_dec_sat)
+        self._fine_controls.on_incr_change(self._on_incr_change)
 
     def _init_colour_controls(self):
         # build controls
@@ -163,21 +164,26 @@ class MainWindow(Gtk.Window):
     def _on_css_hex_lower_toggled(self, btn):
         self._update_model_from_settings()
 
-    def _on_inc_light(self, incr):
-        self._model.colour.inc_light(incr / 100)
+    def _on_inc_light(self):
+        self._model.colour.inc_light(self._model.fine_incr / 100)
         self._update_view('fine')
 
-    def _on_dec_light(self, incr):
-        self._model.colour.dec_light(incr / 100)
+    def _on_dec_light(self):
+        self._model.colour.dec_light(self._model.fine_incr / 100)
         self._update_view('fine')
 
-    def _on_inc_sat(self, incr):
-        self._model.colour.inc_sat(incr / 100)
+    def _on_inc_sat(self):
+        self._model.colour.inc_sat(self._model.fine_incr / 100)
         self._update_view('fine')
 
-    def _on_dec_sat(self, incr):
-        self._model.colour.dec_sat(incr / 100)
+    def _on_dec_sat(self):
+        self._model.colour.dec_sat(self._model.fine_incr / 100)
         self._update_view('fine')
+
+    def _on_incr_change(self):
+        incr = self._fine_controls.get_incr_value()
+        self._model.fine_incr = incr
+        self._update_view('fine-incr')
 
     def _get_rgb_ctrl_values(self):
         r = self._r_ctrl.get_value()
@@ -246,6 +252,9 @@ class MainWindow(Gtk.Window):
     def _update_css_rgb(self):
         self._css_rgb_entry.set_colour_no_emit(self._model.colour)
 
+    def _update_fine_incr(self):
+        self._fine_controls.set_incr_value_no_emit(self._model.fine_incr)
+
     def _update_settings(self):
         self._css_hex_copy_hash_opt.handler_block(self._css_hex_copy_hash_opt_toggled_handler)
         self._css_hex_lower_opt.handler_block(self._css_hex_lower_opt_toggled_handler)
@@ -269,4 +278,7 @@ class MainWindow(Gtk.Window):
             self._update_css_hex()
         if focused_ctrl != 'css-rgb':
             self._update_css_rgb()
+        if focused_ctrl != 'fine-incr':
+            self._update_fine_incr()
+
         self._update_settings()

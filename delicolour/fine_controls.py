@@ -66,7 +66,6 @@ class FineControls(Gtk.HBox):
         self._spin = Gtk.SpinButton()
         self._spin.set_tooltip_text('Fine controls increment value')
         self._spin.set_adjustment(adj)
-        self._spin.set_value(1)
         self._spin.modify_font(Pango.FontDescription('monospace bold 8'))
         self._spin.set_width_chars(3)
         self._on_spin_changed_handler = self._spin.connect('changed', self._on_spin_changed)
@@ -74,26 +73,26 @@ class FineControls(Gtk.HBox):
 
     def _on_inc_light_clicked(self, btn):
         if self._user_on_inc_light:
-            self._user_on_inc_light(self._spin.get_value_as_int())
+            self._user_on_inc_light()
 
     def _on_dec_light_clicked(self, btn):
         if self._user_on_dec_light:
-            self._user_on_dec_light(self._spin.get_value_as_int())
+            self._user_on_dec_light()
 
     def _on_inc_sat_clicked(self, btn):
         if self._user_on_inc_sat:
-            self._user_on_inc_sat(self._spin.get_value_as_int())
+            self._user_on_inc_sat()
 
     def _on_dec_sat_clicked(self, btn):
         if self._user_on_dec_sat:
-            self._user_on_dec_sat(self._spin.get_value_as_int())
+            self._user_on_dec_sat()
 
     def _on_spin_changed(self, edit):
         text = edit.get_text()
         try:
             orig_val = int(text)
         except:
-            self._spin_set_value_no_emit(self._minval)
+            self.set_incr_value_no_emit(self._minval)
             return
         val = orig_val
         if val < self._minval:
@@ -101,12 +100,19 @@ class FineControls(Gtk.HBox):
         elif val > self._maxval:
             val = self._maxval
         if val != orig_val:
-            self._spin_set_value_no_emit(val)
+            self.set_incr_value_no_emit(val)
 
-    def _spin_set_value_no_emit(self, val):
+        # notify user
+        if self._user_on_incr_change:
+            self._user_on_incr_change()
+
+    def set_incr_value_no_emit(self, val):
         self._spin.handler_block(self._on_spin_changed_handler)
         self._spin.set_value(val)
         self._spin.handler_unblock(self._on_spin_changed_handler)
+
+    def get_incr_value(self):
+        return self._spin.get_value_as_int()
 
     def on_inc_light(self, cb):
         self._user_on_inc_light = cb
@@ -120,3 +126,5 @@ class FineControls(Gtk.HBox):
     def on_dec_sat(self, cb):
         self._user_on_dec_sat = cb
 
+    def on_incr_change(self, cb):
+        self._user_on_incr_change = cb
