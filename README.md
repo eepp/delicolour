@@ -41,6 +41,8 @@ You need:
 * Python 3 with:
     * PyGObject
     * NumPy
+    * [Color Math](https://github.com/gtaylor/python-colormath)
+      (use `pip install colormath` for this)
 
 I'm pretty sure you can find this easily for your distribution.
 
