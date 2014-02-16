@@ -4,6 +4,7 @@ from delicolour.scale_entry import ScaleEntry
 from delicolour.big_colour import BigColour
 from delicolour.hex_entry import HexEntry
 from delicolour.rgb_entry import RgbEntry
+from delicolour.fine_controls import FineControls
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
@@ -33,49 +34,16 @@ class MainWindow(Gtk.Window):
         self._big_colour = BigColour()
         self._main_box.pack_start(self._big_colour, True, True, 0)
 
-    @staticmethod
-    def _new_fine_control_btn(img_filename, tooltip_text):
-        img = Gtk.Image()
-        img.set_from_file(img_filename)
-        btn = Gtk.Button()
-        btn.set_tooltip_text(tooltip_text)
-        btn.add(img)
-
-        return btn
-
     def _init_fine_colour_controls(self):
-        # buttons
-        self._inc_light = MainWindow._new_fine_control_btn('res/sun-24.png',
-                                                           'Increase lightness')
-        self._dec_light = MainWindow._new_fine_control_btn('res/moon-24.png',
-                                                           'Decrease lightness')
-        self._inc_sat = MainWindow._new_fine_control_btn('res/sat-24.png',
-                                                         'Increase saturation')
-        self._dec_sat = MainWindow._new_fine_control_btn('res/desat-24.png',
-                                                         'Decrease saturation')
+        # fine controls
+        fine_controls = FineControls(1, 10)
+        self._main_box.pack_start(fine_controls, True, True, 0)
 
         # set callbacks
-        self._inc_light.connect('clicked', self._on_inc_light_clicked)
-        self._dec_light.connect('clicked', self._on_dec_light_clicked)
-        self._inc_sat.connect('clicked', self._on_inc_sat_clicked)
-        self._dec_sat.connect('clicked', self._on_dec_sat_clicked)
-
-        # alignments
-        a_pad_left = Gtk.Alignment()
-        a_pad_left.set_padding(0, 0, config.MAIN_GUTTER_PX, 0)
-        a_pad_left.add(self._dec_light)
-
-        # box
-        box = Gtk.HBox(spacing=0, homogeneous=False)
-
-        # pack into box
-        box.pack_end(self._inc_light, False, True, 0)
-        box.pack_end(a_pad_left, False, True, 0)
-        box.pack_end(self._inc_sat, False, True, 0)
-        box.pack_end(self._dec_sat, False, True, 0)
-
-        # add to proper vbox
-        self._main_box.pack_start(box, True, True, 0)
+        fine_controls.on_inc_light(self._on_inc_light)
+        fine_controls.on_dec_light(self._on_dec_light)
+        fine_controls.on_inc_sat(self._on_inc_sat)
+        fine_controls.on_dec_sat(self._on_dec_sat)
 
     def _init_colour_controls(self):
         # build controls
@@ -194,19 +162,19 @@ class MainWindow(Gtk.Window):
     def _on_css_hex_lower_toggled(self, btn):
         self._update_model_from_settings()
 
-    def _on_inc_light_clicked(self, btn):
+    def _on_inc_light(self):
         self._model.colour.inc_light(self._model.fine_incr)
         self._update_view('fine')
 
-    def _on_dec_light_clicked(self, btn):
+    def _on_dec_light(self):
         self._model.colour.dec_light(self._model.fine_incr)
         self._update_view('fine')
 
-    def _on_inc_sat_clicked(self, btn):
+    def _on_inc_sat(self):
         self._model.colour.inc_sat(self._model.fine_incr)
         self._update_view('fine')
 
-    def _on_dec_sat_clicked(self, btn):
+    def _on_dec_sat(self):
         self._model.colour.dec_sat(self._model.fine_incr)
         self._update_view('fine')
 
