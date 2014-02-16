@@ -140,7 +140,7 @@ class MainWindow(Gtk.Window):
 
         return opt, opt_a
 
-    def _init_css(self):
+    def _init_css_entries(self):
         # hex entry
         self._css_hex_entry = HexEntry()
         self._css_hex_entry.on_change(self._update_model_from_css_hex)
@@ -180,7 +180,7 @@ class MainWindow(Gtk.Window):
         self._init_colour_controls()
 
         # hex
-        self._init_css()
+        self._init_css_entries()
 
     def _on_css_hex_copy_hash_toggled(self, btn):
         self._update_model_from_settings()
