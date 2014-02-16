@@ -85,9 +85,14 @@ class MainWindow(Gtk.Window):
         self._h_ctrl = ScaleEntry('H', 0, 359, 1, wrap=True)
         self._s_ctrl = ScaleEntry('S', 0, 100, 1)
         self._v_ctrl = ScaleEntry('V', 0, 100, 1)
-        a = Gtk.Alignment()
-        a.set_padding(config.MAIN_GUTTER_PX, 0, 0, 0)
-        a.add(self._h_ctrl)
+
+        # alignments for padding
+        a1 = Gtk.Alignment()
+        a1.set_padding(config.MAIN_GUTTER_PX, 0, 0, 0)
+        a1.add(self._r_ctrl)
+        a2 = Gtk.Alignment()
+        a2.set_padding(config.MAIN_GUTTER_PX, 0, 0, 0)
+        a2.add(self._h_ctrl)
 
         # register listeners
         self._r_ctrl.on_change(self._update_model_from_rgb)
@@ -97,10 +102,10 @@ class MainWindow(Gtk.Window):
         self._s_ctrl.on_change(self._update_model_from_hsv)
         self._v_ctrl.on_change(self._update_model_from_hsv)
 
-        self._main_box.pack_start(self._r_ctrl, True, True, 0)
+        self._main_box.pack_start(a1, True, True, 0)
         self._main_box.pack_start(self._g_ctrl, True, True, 0)
         self._main_box.pack_start(self._b_ctrl, True, True, 0)
-        self._main_box.pack_start(a, True, True, 0)
+        self._main_box.pack_start(a2, True, True, 0)
         self._main_box.pack_start(self._s_ctrl, True, True, 0)
         self._main_box.pack_start(self._v_ctrl, True, True, 0)
 
