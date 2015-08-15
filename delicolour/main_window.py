@@ -1,6 +1,7 @@
 from delicolour.fine_controls import FineControls
 from delicolour.css_hex_entry import CssHexEntry
 from delicolour.css_rgb_entry import CssRgbEntry
+from delicolour.fav_colours import FavColours
 from delicolour.scale_entry import ScaleEntry
 from delicolour.big_colour import BigColour
 from delicolour.app_model import AppModel
@@ -96,6 +97,11 @@ class MainWindow(Gtk.Window):
         self._big_colour = BigColour()
         self._big_colour.on_sel_change(self._on_sel_change)
         self._main_box.pack_start(self._big_colour, True, True, 0)
+
+    def _init_fav_colours(self):
+        self._fav_colours = FavColours()
+        self._fav_colours.on_fav_colour_click(self._on_fav_colour_click)
+        self._main_box.pack_start(self._fav_colours, True, True, 0)
 
     def _init_fine_colour_controls(self):
         # fine controls
@@ -214,6 +220,9 @@ class MainWindow(Gtk.Window):
         self._main_box.pack_start(css_rgb_hbox, True, True, 0)
 
     def _init_all(self):
+        # fav colours
+        self._init_fav_colours()
+
         # big colour
         self._init_big_colour()
 
@@ -225,6 +234,14 @@ class MainWindow(Gtk.Window):
 
         # hex
         self._init_css_entries()
+
+    def _on_fav_colour_click(self, event, fav_colour):
+        if event.button == 1:
+            self._model.colour = fav_colour.colour
+            self._update_view()
+        elif event.button == 3:
+            fav_colour.set_colour(self._model.colour)
+            self._update_view()
 
     def _on_sel_change(self, sel):
         self._model.sel = sel

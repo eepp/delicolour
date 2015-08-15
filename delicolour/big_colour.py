@@ -109,7 +109,7 @@ class BigColour(Gtk.DrawingArea):
         cr.fill()
 
         # stroke around everything
-        cr.set_line_width(2)
+        cr.set_line_width(lw)
         cr.set_source_rgb(0.3, 0.3, 0.3)
         do_rect_path()
         cr.stroke()
