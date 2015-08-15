@@ -3,6 +3,7 @@ from delicolour import config
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
+from pkg_resources import resource_filename
 from delicolour.adjustment_controls import AdjustmentControls
 
 
@@ -33,16 +34,21 @@ class FineControls(Gtk.Box):
 
         return btn
 
+    @staticmethod
+    def _get_filename(img):
+        filename = 'res/{}.png'.format(img)
+
+        return resource_filename(__name__, filename)
+
     def _init_controls(self):
+        new = FineControls._new_fine_control_btn
+        gfn = self._get_filename
+
         # buttons
-        self._inc_light = FineControls._new_fine_control_btn('res/sun-24.png',
-                                                             'Increase lightness')
-        self._dec_light = FineControls._new_fine_control_btn('res/moon-24.png',
-                                                             'Decrease lightness')
-        self._inc_sat = FineControls._new_fine_control_btn('res/sat-24.png',
-                                                           'Increase saturation')
-        self._dec_sat = FineControls._new_fine_control_btn('res/desat-24.png',
-                                                           'Decrease saturation')
+        self._inc_light = new(gfn('sun-24'), 'Increase lightness')
+        self._dec_light = new(gfn('moon-24'), 'Decrease lightness')
+        self._inc_sat = new(gfn('sat-24'), 'Increase saturation')
+        self._dec_sat = new(gfn('desat-24'), 'Decrease saturation')
 
         # set callbacks
         self._inc_light.connect('clicked', self._on_inc_light_clicked)

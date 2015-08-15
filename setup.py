@@ -19,6 +19,11 @@ setup(name='delicolour',
       author_email='eeppeliteloop@gmail.com',
       url='https://github.com/eepp/delicolour',
       packages=['delicolour'],
+      package_data={
+          'delicolour': [
+              'res/*.png',
+          ],
+      },
       install_requires=[
           'colormath>=2,<3',
       ],
