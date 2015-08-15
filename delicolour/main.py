@@ -11,11 +11,20 @@ import delicolour
 import argparse
 import warnings
 import signal
+import sys
+
+
+def _perror(msg):
+    print('Error: ' + str(msg), file=sys.stderr)
+    sys.exit(1)
 
 
 def _parse_args():
     ap = argparse.ArgumentParser()
 
+    ap.add_argument('-f', '--fav-colours-count', action='store', type=int,
+                    metavar='COUNT', default=12,
+                    help='number of fav colours (default: 12)')
     ap.add_argument('-l', '--left-colour', action='store', metavar='HEX',
                     help='initial left color (CSS hex)')
     ap.add_argument('-r', '--right-colour', action='store', metavar='HEX',
@@ -25,6 +34,10 @@ def _parse_args():
 
     # parse args
     args = ap.parse_args()
+
+    # validate --fav-colours-count
+    if args.fav_colours_count < 1 or args.fav_colours_count > 16:
+        _perror('--fav-colours-count must be in [1, 16] range')
 
     return args
 

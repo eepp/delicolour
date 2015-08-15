@@ -99,7 +99,7 @@ class MainWindow(Gtk.Window):
         self._main_box.pack_start(self._big_colour, True, True, 0)
 
     def _init_fav_colours(self):
-        self._fav_colours = FavColours()
+        self._fav_colours = FavColours(fav_colours_count=self._args.fav_colours_count)
         self._fav_colours.on_fav_colour_click(self._on_fav_colour_click)
         self._main_box.pack_start(self._fav_colours, True, True, 0)
 
