@@ -32,8 +32,19 @@ class MainWindow(Gtk.Window):
         self._model.colour = colour
 
     def _apply_args(self):
-        if self._args.init is not None:
-            self._apply_arg_init(self._args.init)
+        if self._args.left_colour is not None:
+            try:
+                colour = Colour.from_hex(self._args.left_colour)
+                self._model.colour1 = colour
+            except:
+                pass
+
+        if self._args.right_colour is not None:
+            try:
+                colour = Colour.from_hex(self._args.right_colour)
+                self._model.colour2 = colour
+            except:
+                pass
 
     def _make_me_nice(self):
         self.set_position(Gtk.WindowPosition.CENTER)
