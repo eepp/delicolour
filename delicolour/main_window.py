@@ -232,9 +232,11 @@ class MainWindow(Gtk.Window):
 
     def _on_css_hex_copy_hash_toggled(self, btn):
         self._update_model_from_settings()
+        self._update_view()
 
     def _on_css_hex_lower_toggled(self, btn):
         self._update_model_from_settings()
+        self._update_view()
 
     def _on_inc_light(self):
         self._model.colour.inc_light(self._model.fine_incr / 100)
@@ -355,13 +357,10 @@ class MainWindow(Gtk.Window):
     def _update_settings(self):
         self._css_hex_copy_hash_opt.handler_block(self._css_hex_copy_hash_opt_toggled_handler)
         self._css_hex_lower_opt.handler_block(self._css_hex_lower_opt_toggled_handler)
-
         self._css_hex_copy_hash_opt.set_active(self._model.css_hex_copy_hash)
         self._css_hex_lower_opt.set_active(self._model.css_hex_lower)
-
         self._css_hex_copy_hash_opt.handler_unblock(self._css_hex_copy_hash_opt_toggled_handler)
         self._css_hex_lower_opt.handler_unblock(self._css_hex_lower_opt_toggled_handler)
-
         self._css_hex_entry.set_copy_hash(self._model.css_hex_copy_hash)
         self._css_hex_entry.set_lower(self._model.css_hex_lower)
 
@@ -373,7 +372,28 @@ class MainWindow(Gtk.Window):
         self._s_ctrl.set_page_incr(self._model.fine_incr)
         self._v_ctrl.set_page_incr(self._model.fine_incr)
 
+    def _update_title(self):
+        def get_color_title(colour, sel_colour):
+            if colour is sel_colour:
+                fmt = '[#{}]'
+            else:
+                fmt = '#{}'
+
+            hx = colour.hex
+
+            if not self._model.css_hex_lower:
+                hx = hx.upper()
+
+            return fmt.format(hx)
+
+        fmt = 'delicolour: {} {}'
+        colour1_title = get_color_title(self._model.colour1, self._model.colour)
+        colour2_title = get_color_title(self._model.colour2, self._model.colour)
+        title = fmt.format(colour1_title, colour2_title)
+        self.set_title(title)
+
     def _update_view(self, focused_ctrl=None):
+        self._update_title()
         self._update_big_colour()
 
         if focused_ctrl != 'hsv':
