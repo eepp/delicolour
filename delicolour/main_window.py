@@ -1,13 +1,13 @@
-from delicolour import config
-from delicolour.app_model import AppModel
+from delicolour.fine_controls import FineControls
 from delicolour.scale_entry import ScaleEntry
 from delicolour.big_colour import BigColour
+from delicolour.app_model import AppModel
 from delicolour.hex_entry import HexEntry
 from delicolour.rgb_entry import RgbEntry
-from delicolour.fine_controls import FineControls
+from gi.repository import Pango
+from delicolour import config
 from gi.repository import Gtk
 from gi.repository import Gdk
-from gi.repository import Pango
 
 
 class MainWindow(Gtk.Window):
@@ -20,12 +20,13 @@ class MainWindow(Gtk.Window):
 
     def _make_me_nice(self):
         self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_border_width(config.MAIN_GUTTER_PX * 1.5)
+        self.set_border_width(round(config.MAIN_GUTTER_PX * 1.5))
         self.set_resizable(False)
 
     def _init_main_box(self):
-        self._main_box = Gtk.VBox(spacing=config.MAIN_GUTTER_PX,
-                                  homogeneous=False)
+        self._main_box = Gtk.Box(spacing=config.MAIN_GUTTER_PX,
+                                 homogeneous=False)
+        self._main_box.set_orientation(Gtk.Orientation.VERTICAL)
         self._main_box.set_size_request(320, 0)
         self.add(self._main_box)
         self._init_all()
@@ -85,7 +86,6 @@ class MainWindow(Gtk.Window):
         lbl = Gtk.Label()
         lbl.modify_font(Pango.FontDescription('sans-serif bold 8'))
         lbl.set_text(label)
-        lbl.set_alignment(0, 0)
         lbl.set_width_chars(5)
         color = Gdk.Color(red=config.TEXT_COLOUR_R * 65535,
                           green=config.TEXT_COLOUR_G * 65535,
@@ -93,7 +93,8 @@ class MainWindow(Gtk.Window):
         lbl.modify_fg(Gtk.StateType.NORMAL, color)
 
         # box
-        hbox = Gtk.HBox(spacing=config.MAIN_GUTTER_PX, homogeneous=False)
+        hbox = Gtk.Box(spacing=config.MAIN_GUTTER_PX, homogeneous=False)
+        hbox.props.valign = Gtk.Align.CENTER
         hbox.pack_start(lbl, False, False, 0)
         hbox.pack_start(entry, False, False, 0)
 
@@ -186,16 +187,16 @@ class MainWindow(Gtk.Window):
         self._update_all_incr()
 
     def _get_rgb_ctrl_values(self):
-        r = self._r_ctrl.get_value()
-        g = self._g_ctrl.get_value()
-        b = self._b_ctrl.get_value()
+        r = self._r_ctrl.value
+        g = self._g_ctrl.value
+        b = self._b_ctrl.value
 
         return r, g, b
 
     def _get_hsv_ctrl_values(self):
-        h = self._h_ctrl.get_value()
-        s = self._s_ctrl.get_value()
-        v = self._v_ctrl.get_value()
+        h = self._h_ctrl.value
+        s = self._s_ctrl.value
+        v = self._v_ctrl.value
 
         return h, s, v
 
@@ -217,12 +218,12 @@ class MainWindow(Gtk.Window):
         self._update_view('hsv')
 
     def _update_model_from_css_hex(self):
-        colour = self._css_hex_entry.get_colour()
+        colour = self._css_hex_entry.colour
         self._model.colour = colour
         self._update_view('css-hex')
 
     def _update_model_from_css_rgb(self):
-        colour = self._css_rgb_entry.get_colour()
+        colour = self._css_rgb_entry.colour
         self._model.colour = colour
         self._update_view('css-rgb')
 
@@ -235,13 +236,13 @@ class MainWindow(Gtk.Window):
         self._big_colour.set_colour(self._model.colour)
 
     def _update_rgb_ctrls(self):
-        r, g, b = self._model.colour.get_rgb()
+        r, g, b = self._model.colour.rgb
         self._r_ctrl.set_value_no_emit(r)
         self._g_ctrl.set_value_no_emit(g)
         self._b_ctrl.set_value_no_emit(b)
 
     def _update_hsv_ctrls(self):
-        h, s, v = self._model.colour.get_hsv()
+        h, s, v = self._model.colour.hsv
         self._h_ctrl.set_value_no_emit(h)
         self._s_ctrl.set_value_no_emit(s * 100)
         self._v_ctrl.set_value_no_emit(v * 100)
@@ -278,16 +279,22 @@ class MainWindow(Gtk.Window):
 
     def _update_view(self, focused_ctrl):
         self._update_big_colour()
+
         if focused_ctrl != 'hsv':
             self._update_hsv_ctrls()
+
         if focused_ctrl != 'rgb':
             self._update_rgb_ctrls()
+
         if focused_ctrl != 'css-hex':
             self._update_css_hex()
+
         if focused_ctrl != 'css-rgb':
             self._update_css_rgb()
+
         if focused_ctrl != 'fine-incr':
             self._update_fine_incr()
+
         if focused_ctrl == 'init':
             self._update_settings()
             self._update_all_incr()

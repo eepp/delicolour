@@ -1,6 +1,6 @@
 import math
-from delicolour.colour import Colour
 from gi.repository import Gtk
+from delicolour.colour import Colour
 
 
 class BigColour(Gtk.DrawingArea):
@@ -23,6 +23,7 @@ class BigColour(Gtk.DrawingArea):
 
     def _on_draw(self, drawing_area, cr):
         def do_path():
+            # rectangle with rounded corners
             cr.move_to(br + 2, 2)
             cr.arc(width - br - 2, br + 2, br, -0.5 * math.pi, 0)
             cr.arc(width - br - 2, height - br - 2, br, 0, 0.5 * math.pi)
@@ -34,7 +35,7 @@ class BigColour(Gtk.DrawingArea):
         br = self._border_radius
 
         # set colour
-        r, g, b = self._colour.get_rgb()
+        r, g, b = self._colour.rgb
         r /= 255
         g /= 255
         b /= 255

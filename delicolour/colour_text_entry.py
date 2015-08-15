@@ -1,6 +1,5 @@
 import re
 from delicolour import config
-from delicolour.colour import Colour
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
@@ -17,6 +16,7 @@ class ColourTextEntry(Gtk.Entry):
         self.set_max_length(maxlen)
         self.modify_font(Pango.FontDescription('monospace bold 8'))
         self.set_width_chars(maxlen)
+        self.set_max_width_chars(maxlen)
         self.connect('insert-text', self._on_insert_text)
         self._changed_handler = self.connect('changed', self._on_changed)
         self.connect('cut-clipboard', self._on_cut)
@@ -61,11 +61,13 @@ class ColourTextEntry(Gtk.Entry):
 
     def _on_paste(self, entry):
         text = self._get_clipboard()
+
         if text is not None:
             self.set_text_no_emit(text)
 
             # notify user
             self._do_user_on_change()
+
         self.stop_emission('paste-clipboard')
 
     def get_colour(self):

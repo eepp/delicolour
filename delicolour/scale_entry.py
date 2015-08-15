@@ -5,7 +5,7 @@ from gi.repository import Gdk
 from gi.repository import Pango
 
 
-class ScaleEntry(Gtk.HBox):
+class ScaleEntry(Gtk.Box):
     def __init__(self, label, minval, maxval, page_incr,
                  r=config.TEXT_COLOUR_R, g=config.TEXT_COLOUR_G,
                  b=config.TEXT_COLOUR_B, wrap=False):
@@ -32,6 +32,7 @@ class ScaleEntry(Gtk.HBox):
         self._entry.set_max_length(3)
         self._entry.modify_font(Pango.FontDescription('monospace bold 8'))
         self._entry.set_width_chars(3)
+        self._entry.set_max_width_chars(3)
         self._entry.set_alignment(1)
         self._entry.add_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.SMOOTH_SCROLL_MASK)
         self._entry.connect('insert-text', self._on_entry_insert_text)
@@ -50,11 +51,12 @@ class ScaleEntry(Gtk.HBox):
         self._scale.set_digits(0)
 
         # hbox
-        Gtk.HBox.__init__(self, spacing=config.MAIN_GUTTER_PX,
-                          homogeneous=False)
-        self.pack_start(lbl, False, True, 0)
+        super().__init__(self, spacing=config.MAIN_GUTTER_PX,
+                         homogeneous=False)
+        self.set_orientation(Gtk.Orientation.HORIZONTAL)
+        self.pack_start(lbl, False, False, 0)
         self.pack_start(self._scale, True, True, 0)
-        self.pack_start(self._entry, False, True, 0)
+        self.pack_start(self._entry, False, False, 0)
 
     def set_page_incr(self, page_incr):
         self._page_incr = page_incr
@@ -68,7 +70,8 @@ class ScaleEntry(Gtk.HBox):
 
     def _get_normalized_value(self, value):
         if value is None:
-            value = self.get_value()
+            value = self.value
+
         value = int(value)
 
         # clip?
@@ -77,7 +80,7 @@ class ScaleEntry(Gtk.HBox):
         elif value > self._maxval:
             return self._maxval
         elif value is None:
-            return self.get_value()
+            return self.value
         else:
             return value
 
@@ -98,7 +101,8 @@ class ScaleEntry(Gtk.HBox):
     def set_value_no_emit(self, value):
         self._set_ctrl_values_no_emit(value)
 
-    def get_value(self):
+    @property
+    def value(self):
         return self._scale.get_value()
 
     def _on_entry_insert_text(self, entry, new_text, new_text_length,
@@ -108,6 +112,7 @@ class ScaleEntry(Gtk.HBox):
 
     def _on_entry_changed(self, editable):
         text = self._entry.get_text()
+
         if len(text) == 0:
             # consider nothing changed
             return
@@ -122,8 +127,9 @@ class ScaleEntry(Gtk.HBox):
         self._do_user_on_change()
 
     def _on_entry_scroll_event(self, widget, ev):
-        value = self.get_value()
+        value = self.value
         y_scroll = ev.get_scroll_deltas()[2]
+
         if y_scroll < 0:
             value -= self._page_incr
         elif y_scroll > 0:

@@ -1,10 +1,10 @@
-import re
-from delicolour import config
-from delicolour.colour import Colour
 from delicolour.colour_text_entry import ColourTextEntry
-from gi.repository import Gtk
-from gi.repository import Gdk
+from delicolour.colour import Colour
 from gi.repository import Pango
+from gi.repository import Gdk
+from delicolour import config
+from gi.repository import Gtk
+import re
 
 
 class RgbEntry(ColourTextEntry):
@@ -36,7 +36,8 @@ class RgbEntry(ColourTextEntry):
     def _get_real_text(self, text):
         return text.lower()
 
-    def get_colour(self):
+    @property
+    def colour(self):
         return Colour.from_css_rgb(self.get_text())
 
     def set_colour_no_emit(self, colour):

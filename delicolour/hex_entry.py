@@ -21,6 +21,7 @@ class HexEntry(ColourTextEntry):
 
     def _current_text_is_valid(self):
         text = self.get_text()
+
         return self._text_len_is_valid(text)
 
     def _match_input(self, text):
@@ -28,6 +29,7 @@ class HexEntry(ColourTextEntry):
 
     def _text_to_clipboard(self):
         text = self.get_text()
+
         if self._copy_hash:
             text = '#{}'.format(text)
 
@@ -35,8 +37,10 @@ class HexEntry(ColourTextEntry):
 
     def _text_from_clipboard(self, text):
         text = text.strip()
+
         if text.startswith('#'):
             text = text[1:]
+
         if self._text_len_is_valid(text):
             return text
 
@@ -44,6 +48,7 @@ class HexEntry(ColourTextEntry):
 
     def _get_real_text(self, text):
         text = text.upper()
+
         if self._lower:
             text = text.lower()
 
@@ -51,10 +56,13 @@ class HexEntry(ColourTextEntry):
 
     def set_lower(self, lower):
         self._lower = lower
+
         if self._current_text_is_valid():
             text = self.get_text().upper()
+
             if lower:
                 text = text.lower()
+
             self.set_text_no_emit(text)
 
     def set_copy_hash(self, copy_hash):
@@ -64,4 +72,4 @@ class HexEntry(ColourTextEntry):
         return Colour.from_hex(self.get_text())
 
     def set_colour_no_emit(self, colour):
-        self.set_text_no_emit(colour.get_hex())
+        self.set_text_no_emit(colour.hex)

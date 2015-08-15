@@ -5,7 +5,7 @@ from gi.repository import Gdk
 from gi.repository import Pango
 
 
-class FineControls(Gtk.HBox):
+class FineControls(Gtk.Box):
     def __init__(self, minval, maxval):
         # parameters
         self._minval = minval
@@ -17,7 +17,8 @@ class FineControls(Gtk.HBox):
         self._user_on_incr_change = None
 
         # parent box
-        Gtk.HBox.__init__(self, spacing=0, homogeneous=False)
+        super().__init__(self, spacing=0, homogeneous=False)
+        self.set_orientation(Gtk.Orientation.HORIZONTAL)
 
         # controls
         self._init_controls()
@@ -68,6 +69,7 @@ class FineControls(Gtk.HBox):
         self._spin.set_adjustment(adj)
         self._spin.modify_font(Pango.FontDescription('monospace bold 8'))
         self._spin.set_width_chars(3)
+        self._spin.set_max_width_chars(3)
         self._on_spin_changed_handler = self._spin.connect('changed', self._on_spin_changed)
         self.pack_start(self._spin, False, True, 0)
 
@@ -89,16 +91,20 @@ class FineControls(Gtk.HBox):
 
     def _on_spin_changed(self, edit):
         text = edit.get_text()
+
         try:
             orig_val = int(text)
         except:
             self.set_incr_value_no_emit(self._minval)
             return
+
         val = orig_val
+
         if val < self._minval:
             val = self._minval
         elif val > self._maxval:
             val = self._maxval
+
         if val != orig_val:
             self.set_incr_value_no_emit(val)
 
