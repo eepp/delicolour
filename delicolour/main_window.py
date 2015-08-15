@@ -8,6 +8,7 @@ from gi.repository import Pango
 from delicolour import config
 from gi.repository import Gtk
 from gi.repository import Gdk
+from functools import partial
 
 
 class MainWindow(Gtk.Window):
@@ -99,7 +100,11 @@ class MainWindow(Gtk.Window):
         self._h_ctrl.on_change(self._update_model_from_hsv)
         self._s_ctrl.on_change(self._update_model_from_hsv)
         self._v_ctrl.on_change(self._update_model_from_hsv)
+        self._r_ctrl.on_key_press(partial(self._on_scale_entry_key_press, 'r'))
+        self._g_ctrl.on_key_press(partial(self._on_scale_entry_key_press, 'g'))
+        self._b_ctrl.on_key_press(partial(self._on_scale_entry_key_press, 'b'))
 
+        # pack
         self._main_box.pack_start(a1, True, True, 0)
         self._main_box.pack_start(self._g_ctrl, True, True, 0)
         self._main_box.pack_start(self._b_ctrl, True, True, 0)
@@ -208,6 +213,28 @@ class MainWindow(Gtk.Window):
     def _on_dec_sat(self):
         self._model.colour.dec_sat(self._model.fine_incr / 100)
         self._update_view()
+
+    def _on_scale_entry_key_press(self, origin, key_name):
+        if origin == key_name:
+            return
+
+        r, g, b = self._model.colour.rgb
+
+        if origin == 'r':
+            origin_value = self._r_ctrl.value
+        elif origin == 'g':
+            origin_value = self._g_ctrl.value
+        elif origin == 'b':
+            origin_value = self._b_ctrl.value
+
+        if key_name == 'r':
+            r = origin_value
+        elif key_name == 'g':
+            g = origin_value
+        elif key_name == 'b':
+            b = origin_value
+
+        self._set_model_rgb(r, g, b)
 
     def _update_model_from_incr(self):
         incr = self._fine_controls.incr_value

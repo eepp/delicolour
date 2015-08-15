@@ -5,6 +5,9 @@ from gi.repository import Gdk
 from gi.repository import Pango
 
 
+_re_key_press = re.compile(r'[a-zA-Z]')
+
+
 class ScaleEntry(Gtk.Box):
     def __init__(self, label, minval, maxval, page_incr,
                  r=config.TEXT_COLOUR_R, g=config.TEXT_COLOUR_G,
@@ -18,6 +21,7 @@ class ScaleEntry(Gtk.Box):
         self._page_incr = page_incr
         self._wrap = wrap
         self._user_on_change = None
+        self._user_on_key_press = None
 
         # label
         lbl = Gtk.Label()
@@ -37,6 +41,7 @@ class ScaleEntry(Gtk.Box):
         self._entry.add_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.SMOOTH_SCROLL_MASK)
         self._entry.connect('insert-text', self._on_entry_insert_text)
         self._entry.connect('scroll-event', self._on_entry_scroll_event)
+        self._entry.connect('key_press_event', self._on_entry_key_press)
         self._entry_changed_handler = self._entry.connect('changed', self._on_entry_changed)
 
         # scale
@@ -66,6 +71,10 @@ class ScaleEntry(Gtk.Box):
     def _do_user_on_change(self):
         if self._user_on_change:
             self._user_on_change()
+
+    def _do_user_on_key_press(self, key_name):
+        if self._user_on_key_press:
+            self._user_on_key_press(key_name)
 
     def _get_normalized_value(self, value):
         if value is None:
@@ -144,6 +153,12 @@ class ScaleEntry(Gtk.Box):
         # notify user
         self._do_user_on_change()
 
+    def _on_entry_key_press(self, widget, event):
+        key_name = Gdk.keyval_name(event.keyval)
+
+        if _re_key_press.match(key_name):
+            self._do_user_on_key_press(key_name)
+
     def _on_scale_change_value(self, scale, scroll, value):
         # value
         value = self._get_normalized_value(value)
@@ -161,6 +176,9 @@ class ScaleEntry(Gtk.Box):
 
     def on_change(self, cb):
         self._user_on_change = cb
+
+    def on_key_press(self, cb):
+        self._user_on_key_press = cb
 
     def get_entry(self):
         return self._entry

@@ -11,6 +11,18 @@ class Colour:
     def set_rgb(self, r, g, b):
         self._set_rgb_color(AdobeRGBColor(r, g, b, True))
 
+    def set_r(self, r):
+        self._rgb_color.rgb_r = r
+        self._update_hsv_from_rgb()
+
+    def set_g(self, g):
+        self._rgb_color.rgb_g = g
+        self._update_hsv_from_rgb()
+
+    def set_b(self, b):
+        self._rgb_color.rgb_b = b
+        self._update_hsv_from_rgb()
+
     def set_hsv(self, h, s, v):
         self._set_hsv_color(HSVColor(h, s, v))
 
