@@ -1,3 +1,10 @@
+import gi
+
+
+# required GI versions/features
+gi.require_version('Gtk', '3.0')
+
+
 from delicolour import main_window
 from gi.repository import Gtk
 import signal
