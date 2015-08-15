@@ -64,6 +64,14 @@ class MainWindow(Gtk.Window):
         elif key_name == 'w':
             # increase saturation
             self._on_inc_sat()
+        elif key_name == 'numbersign':
+            # swap colours
+            if self._model.sel == 1:
+                self._model.sel = 2
+            else:
+                self._model.sel = 1
+
+            self._update_view()
 
     def _init_main_box(self):
         self._main_box = Gtk.Box(spacing=config.MAIN_GUTTER_PX,
@@ -75,6 +83,7 @@ class MainWindow(Gtk.Window):
 
     def _init_big_colour(self):
         self._big_colour = BigColour()
+        self._big_colour.on_sel_change(self._on_sel_change)
         self._main_box.pack_start(self._big_colour, True, True, 0)
 
     def _init_fine_colour_controls(self):
@@ -206,6 +215,10 @@ class MainWindow(Gtk.Window):
         # hex
         self._init_css_entries()
 
+    def _on_sel_change(self, sel):
+        self._model.sel = sel
+        self._update_view()
+
     def _on_css_hex_copy_hash_toggled(self, btn):
         self._update_model_from_settings()
 
@@ -306,7 +319,9 @@ class MainWindow(Gtk.Window):
         self._update_settings()
 
     def _update_big_colour(self):
-        self._big_colour.set_colour(self._model.colour)
+        self._big_colour.set_colour1(self._model.colour1)
+        self._big_colour.set_colour2(self._model.colour2)
+        self._big_colour.set_sel(self._model.sel)
 
     def _update_rgb_ctrls(self):
         r, g, b = self._model.colour.rgb
