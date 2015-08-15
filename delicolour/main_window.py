@@ -11,8 +11,9 @@ from gi.repository import Gdk
 
 
 class MainWindow(Gtk.Window):
-    def __init__(self):
+    def __init__(self, args):
         super().__init__(title='delicolour')
+        self._args = args
         self._make_me_nice()
         self._init_main_box()
         self._init_keyb()
