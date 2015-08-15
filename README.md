@@ -3,7 +3,7 @@
 **_delicolour_** is a lightweight _colour finder_. It uses Gtk+ 3.
 It has only been tested on Linux.
 
-![delicolour screenshot](http://ss.0x3b.org/alencons991.png)
+![delicolour screenshot](http://ss.0x3b.org/seminaristic317.png)
 
 The goal of delicolour is to have a straightforward interface for
 choosing a colour (mainly for Web design), not as advanced as
@@ -68,16 +68,18 @@ Launch delicolour:
     delicolour
 
 
-### Big rectangle
+### Interface
+
+#### Big rectangle
 
 ![](http://ss.0x3b.org/goustie723.png)
 
 The big rectangle at the top shows the current selected colour.
 
 
-### Fine-tuning controls
+#### Fine-tuning controls
 
-![](http://ss.0x3b.org/lissomly973.png)
+![](http://ss.0x3b.org/nonarsenic673.png)
 
 Fine-tuning controls allow to modify the current colour using
 buttons to increment/decrement parameters.
@@ -94,7 +96,7 @@ The parameters (buttons), from left to right, are:
   * Increase lightness
 
 
-### RGB
+#### RGB
 
 ![](http://ss.0x3b.org/dentinasal310.png)
 
@@ -102,7 +104,7 @@ The RGB sliders control the amount of red, green, and blue in the
 current colour.
 
 
-### HSV
+#### HSV
 
 ![](http://ss.0x3b.org/prodigality831.png)
 
@@ -110,7 +112,7 @@ The HSV sliders control the hue, saturation, and value or the current
 colour.
 
 
-### CSS hex
+#### CSS hex
 
 ![](http://ss.0x3b.org/morningtide885.png)
 
@@ -130,7 +132,7 @@ If the `Lowercase` option is checked, the CSS hex value is written in
 lowercase when updated.
 
 
-### CSS RGB
+#### CSS RGB
 
 ![](http://ss.0x3b.org/idealising239.png)
 
@@ -143,3 +145,15 @@ text box and pressing Ctrl+C (no need to select the whole text).
 You can paste a CSS RGB value, with or without a `#` prefix, by
 clicking on the text box and pressing Ctrl+V (no need to select the
 whole text).
+
+
+### Keyboard shortcuts
+
+Key | Action
+--- | -------
+`z` | Set current colour to black
+`x` | Set current colour to white
+`q` | Decrease saturation
+`w` | Increase saturation
+`-` | Decrease lightness
+`=`/`+` | Increase lightness
