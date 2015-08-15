@@ -72,11 +72,12 @@ class ColourTextEntry(Gtk.Entry):
 
         self.stop_emission('paste-clipboard')
 
-    def get_colour(self):
-        return None
+    @property
+    def colour(self):
+        raise NotImplementedError()
 
     def set_colour_no_emit(self, colour):
-        pass
+        raise NotImplementedError()
 
     def set_text_no_emit(self, text):
         self.handler_block(self._changed_handler)
