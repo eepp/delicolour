@@ -14,6 +14,7 @@ class RgbEntry(ColourTextEntry):
     @staticmethod
     def _text_is_valid(text):
         text = text.lower()
+
         return re.search(r'^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$', text)
 
     def _current_text_is_valid(self):
@@ -21,6 +22,7 @@ class RgbEntry(ColourTextEntry):
 
     def _match_input(self, text):
         text = text.lower()
+
         return re.search(r'^[ rgb()\,0-9]*$', text)
 
     def _text_to_clipboard(self):
@@ -28,6 +30,7 @@ class RgbEntry(ColourTextEntry):
 
     def _text_from_clipboard(self, text):
         text = text.lower().strip()
+
         if self._text_is_valid(text):
             return text
 
