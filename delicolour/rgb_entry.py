@@ -9,7 +9,7 @@ import re
 
 class RgbEntry(ColourTextEntry):
     def __init__(self):
-        ColourTextEntry.__init__(self, 18)
+        super().__init__(18)
 
     @staticmethod
     def _text_is_valid(text):

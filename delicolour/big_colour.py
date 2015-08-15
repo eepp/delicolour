@@ -12,7 +12,7 @@ class BigColour(Gtk.DrawingArea):
         self._border_radius = border_radius
 
         # initialize drawing area
-        Gtk.DrawingArea.__init__(self)
+        super().__init__()
         self.set_size_request(0, height)
         self.connect('draw', self._on_draw)
 

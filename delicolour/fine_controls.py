@@ -17,7 +17,7 @@ class FineControls(Gtk.Box):
         self._user_on_incr_change = None
 
         # parent box
-        super().__init__(self, spacing=0, homogeneous=False)
+        super().__init__(spacing=0, homogeneous=False)
         self.set_orientation(Gtk.Orientation.HORIZONTAL)
 
         # controls

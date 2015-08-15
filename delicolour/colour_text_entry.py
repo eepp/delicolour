@@ -12,7 +12,7 @@ class ColourTextEntry(Gtk.Entry):
         self._clipboard_sel = Gdk.SELECTION_CLIPBOARD
 
         # build entry
-        Gtk.Entry.__init__(self)
+        super().__init__()
         self.set_max_length(maxlen)
         self.modify_font(Pango.FontDescription('monospace bold 8'))
         self.set_width_chars(maxlen)

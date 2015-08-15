@@ -12,7 +12,7 @@ from gi.repository import Gdk
 
 class MainWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="delicolour")
+        super().__init__(title="delicolour")
         self._make_me_nice()
         self._init_main_box()
         self._model = AppModel.get_default()

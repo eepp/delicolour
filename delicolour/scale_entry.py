@@ -51,8 +51,7 @@ class ScaleEntry(Gtk.Box):
         self._scale.set_digits(0)
 
         # hbox
-        super().__init__(self, spacing=config.MAIN_GUTTER_PX,
-                         homogeneous=False)
+        super().__init__(spacing=config.MAIN_GUTTER_PX, homogeneous=False)
         self.set_orientation(Gtk.Orientation.HORIZONTAL)
         self.pack_start(lbl, False, False, 0)
         self.pack_start(self._scale, True, True, 0)

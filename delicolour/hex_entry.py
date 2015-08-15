@@ -14,7 +14,7 @@ class HexEntry(ColourTextEntry):
         self._copy_hash = copy_hash
 
         # build parent
-        ColourTextEntry.__init__(self, 6)
+        super().__init__(6)
 
     def _text_len_is_valid(self, text):
         return len(text) in [3, 6]
