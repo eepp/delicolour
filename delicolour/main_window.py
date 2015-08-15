@@ -15,6 +15,7 @@ class MainWindow(Gtk.Window):
         super().__init__(title='delicolour')
         self._make_me_nice()
         self._init_main_box()
+        self._init_keyb()
         self._model = AppModel.get_default()
         self._update_view('init')
 
@@ -22,6 +23,28 @@ class MainWindow(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_border_width(round(config.MAIN_GUTTER_PX * 1.5))
         self.set_resizable(False)
+
+    def _init_keyb(self):
+        self.connect('key_press_event', self._on_key_press)
+
+    def _on_key_press(self, widget, event):
+        key_name = Gdk.keyval_name(event.keyval)
+
+        if key_name == 'z':
+            # set to black
+            self._set_model_rgb(0, 0, 0)
+        elif key_name == 'x':
+            # set to white
+            self._set_model_rgb(255, 255, 255)
+        elif key_name == 'minus':
+            # decrease lightness
+            self._on_dec_light()
+        elif key_name == 'plus' or key_name == 'equal':
+            # increase lightness
+            self._on_inc_light()
+
+        print(key_name)
+
 
     def _init_main_box(self):
         self._main_box = Gtk.Box(spacing=config.MAIN_GUTTER_PX,
@@ -168,22 +191,22 @@ class MainWindow(Gtk.Window):
 
     def _on_inc_light(self):
         self._model.colour.inc_light(self._model.fine_incr / 100)
-        self._update_view('fine')
+        self._update_view()
 
     def _on_dec_light(self):
         self._model.colour.dec_light(self._model.fine_incr / 100)
-        self._update_view('fine')
+        self._update_view()
 
     def _on_inc_sat(self):
         self._model.colour.inc_sat(self._model.fine_incr / 100)
-        self._update_view('fine')
+        self._update_view()
 
     def _on_dec_sat(self):
         self._model.colour.dec_sat(self._model.fine_incr / 100)
-        self._update_view('fine')
+        self._update_view()
 
     def _update_model_from_incr(self):
-        incr = self._fine_controls.get_incr_value()
+        incr = self._fine_controls.incr_value
         self._model.fine_incr = incr
         self._update_all_incr()
 
@@ -205,6 +228,10 @@ class MainWindow(Gtk.Window):
         self._h_ctrl.enable_on_change(en)
         self._s_ctrl.enable_on_change(en)
         self._v_ctrl.enable_on_change(en)
+
+    def _set_model_rgb(self, r, g, b):
+        self._model.colour.set_rgb(r, g, b)
+        self._update_view()
 
     def _update_model_from_rgb(self):
         r, g, b = self._get_rgb_ctrl_values()
@@ -254,9 +281,6 @@ class MainWindow(Gtk.Window):
     def _update_css_rgb(self):
         self._css_rgb_entry.set_colour_no_emit(self._model.colour)
 
-    def _update_fine_incr(self):
-        self._fine_controls.set_incr_value_no_emit(self._model.fine_incr)
-
     def _update_settings(self):
         self._css_hex_copy_hash_opt.handler_block(self._css_hex_copy_hash_opt_toggled_handler)
         self._css_hex_lower_opt.handler_block(self._css_hex_lower_opt_toggled_handler)
@@ -278,7 +302,7 @@ class MainWindow(Gtk.Window):
         self._s_ctrl.set_page_incr(self._model.fine_incr)
         self._v_ctrl.set_page_incr(self._model.fine_incr)
 
-    def _update_view(self, focused_ctrl):
+    def _update_view(self, focused_ctrl=None):
         self._update_big_colour()
 
         if focused_ctrl != 'hsv':
@@ -292,9 +316,6 @@ class MainWindow(Gtk.Window):
 
         if focused_ctrl != 'css-rgb':
             self._update_css_rgb()
-
-        if focused_ctrl != 'fine-incr':
-            self._update_fine_incr()
 
         if focused_ctrl == 'init':
             self._update_settings()

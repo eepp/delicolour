@@ -3,6 +3,7 @@ from delicolour import config
 from gi.repository import Gtk
 from gi.repository import Gdk
 from gi.repository import Pango
+from delicolour.adjustment_controls import AdjustmentControls
 
 
 class FineControls(Gtk.Box):
@@ -14,7 +15,6 @@ class FineControls(Gtk.Box):
         self._user_on_dec_light = None
         self._user_on_inc_sat = None
         self._user_on_dec_sat = None
-        self._user_on_incr_change = None
 
         # parent box
         super().__init__(spacing=0, homogeneous=False)
@@ -56,22 +56,14 @@ class FineControls(Gtk.Box):
         a_pad_left.add(self._dec_light)
 
         # pack into box
-        self.pack_end(self._inc_light, False, True, 0)
-        self.pack_end(a_pad_left, False, True, 0)
-        self.pack_end(self._inc_sat, False, True, 0)
-        self.pack_end(self._dec_sat, False, True, 0)
+        self.pack_end(self._inc_light, False, False, 0)
+        self.pack_end(a_pad_left, False, False, 0)
+        self.pack_end(self._inc_sat, False, False, 0)
+        self.pack_end(self._dec_sat, False, False, 0)
 
-        # spinner
-        adj = Gtk.Adjustment(value=1, lower=self._minval, upper=self._maxval,
-                             step_incr=1, page_incr=1)
-        self._spin = Gtk.SpinButton()
-        self._spin.set_tooltip_text('Fine controls increment value')
-        self._spin.set_adjustment(adj)
-        self._spin.modify_font(Pango.FontDescription('monospace bold 8'))
-        self._spin.set_width_chars(3)
-        self._spin.set_max_width_chars(3)
-        self._on_spin_changed_handler = self._spin.connect('changed', self._on_spin_changed)
-        self.pack_start(self._spin, False, True, 0)
+        # adjustment controls
+        self._adj = AdjustmentControls(1, 15)
+        self.pack_start(self._adj, False, False, 0)
 
     def _on_inc_light_clicked(self, btn):
         if self._user_on_inc_light:
@@ -89,36 +81,9 @@ class FineControls(Gtk.Box):
         if self._user_on_dec_sat:
             self._user_on_dec_sat()
 
-    def _on_spin_changed(self, edit):
-        text = edit.get_text()
-
-        try:
-            orig_val = int(text)
-        except:
-            self.set_incr_value_no_emit(self._minval)
-            return
-
-        val = orig_val
-
-        if val < self._minval:
-            val = self._minval
-        elif val > self._maxval:
-            val = self._maxval
-
-        if val != orig_val:
-            self.set_incr_value_no_emit(val)
-
-        # notify user
-        if self._user_on_incr_change:
-            self._user_on_incr_change()
-
-    def set_incr_value_no_emit(self, val):
-        self._spin.handler_block(self._on_spin_changed_handler)
-        self._spin.set_value(val)
-        self._spin.handler_unblock(self._on_spin_changed_handler)
-
-    def get_incr_value(self):
-        return self._spin.get_value_as_int()
+    @property
+    def incr_value(self):
+        return self._adj.value
 
     def on_inc_light(self, cb):
         self._user_on_inc_light = cb
@@ -133,4 +98,4 @@ class FineControls(Gtk.Box):
         self._user_on_dec_sat = cb
 
     def on_incr_change(self, cb):
-        self._user_on_incr_change = cb
+        self._adj.on_incr_change(cb)
