@@ -84,9 +84,10 @@ class MainWindow(Gtk.Window):
     def _new_css_entry_hbox(label, entry):
         # label
         lbl = Gtk.Label()
-        lbl.modify_font(Pango.FontDescription('sans-serif bold 8'))
+        lbl.modify_font(Pango.FontDescription('sans-serif 8'))
         lbl.set_text(label)
-        lbl.set_width_chars(5)
+        lbl.set_width_chars(4)
+        lbl.set_alignment(0, 0.5)
         color = Gdk.Color(red=config.TEXT_COLOUR_R * 65535,
                           green=config.TEXT_COLOUR_G * 65535,
                           blue=config.TEXT_COLOUR_B * 65535)
