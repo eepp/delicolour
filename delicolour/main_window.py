@@ -42,9 +42,12 @@ class MainWindow(Gtk.Window):
         elif key_name == 'plus' or key_name == 'equal':
             # increase lightness
             self._on_inc_light()
-
-        print(key_name)
-
+        elif key_name == 'q':
+            # decrease saturation
+            self._on_dec_sat()
+        elif key_name == 'w':
+            # increase saturation
+            self._on_inc_sat()
 
     def _init_main_box(self):
         self._main_box = Gtk.Box(spacing=config.MAIN_GUTTER_PX,
