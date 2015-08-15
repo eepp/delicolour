@@ -68,7 +68,8 @@ class CssHexEntry(ColourTextEntry):
     def set_copy_hash(self, copy_hash):
         self._copy_hash = copy_hash
 
-    def get_colour(self):
+    @property
+    def colour(self):
         return Colour.from_hex(self.get_text())
 
     def set_colour_no_emit(self, colour):
