@@ -130,7 +130,7 @@ If the `Lowercase` option is checked, the CSS hex value is written in
 lowercase when updated.
 
 
-### CSS rgb
+### CSS RGB
 
 ![](http://ss.0x3b.org/idealising239.png)
 
