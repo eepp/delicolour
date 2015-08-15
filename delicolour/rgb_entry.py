@@ -17,7 +17,7 @@ class RgbEntry(ColourTextEntry):
         return re.search(r'^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$', text)
 
     def _current_text_is_valid(self):
-        return RgbEntry._text_is_valid(self.get_text())
+        return self._text_is_valid(self.get_text())
 
     def _match_input(self, text):
         text = text.lower()
