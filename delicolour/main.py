@@ -16,6 +16,8 @@ import signal
 def _parse_args():
     ap = argparse.ArgumentParser()
 
+    ap.add_argument('-i', '--init', action='store', metavar='HEX',
+                    help='initial color (CSS hex)')
     ap.add_argument('-V', '--version', action='version',
                     version='%(prog)s v{}'.format(delicolour.__version__))
 

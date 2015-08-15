@@ -51,6 +51,9 @@ class Colour:
     def set_from_hex(self, hex_str):
         hex_str = hex_str.strip()
 
+        if hex_str.startswith('#'):
+            hex_str = hex_str[1:]
+
         if len(hex_str) == 3:
             hex_str = '{r}{r}{g}{g}{b}{b}'.format(r=hex_str[0],
                                                   g=hex_str[1],

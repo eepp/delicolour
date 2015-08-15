@@ -4,6 +4,7 @@ from delicolour.css_rgb_entry import CssRgbEntry
 from delicolour.scale_entry import ScaleEntry
 from delicolour.big_colour import BigColour
 from delicolour.app_model import AppModel
+from delicolour.colour import Colour
 from gi.repository import Pango
 from delicolour import config
 from gi.repository import Gtk
@@ -19,7 +20,20 @@ class MainWindow(Gtk.Window):
         self._init_main_box()
         self._init_keyb()
         self._model = AppModel.get_default()
+        self._apply_args()
         self._update_view('init')
+
+    def _apply_arg_init(self, init):
+        try:
+            colour = Colour.from_hex(init)
+        except:
+            return
+
+        self._model.colour = colour
+
+    def _apply_args(self):
+        if self._args.init is not None:
+            self._apply_arg_init(self._args.init)
 
     def _make_me_nice(self):
         self.set_position(Gtk.WindowPosition.CENTER)
