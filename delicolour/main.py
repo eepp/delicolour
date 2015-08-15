@@ -3,7 +3,8 @@ from gi.repository import Gtk
 import signal
 import warnings
 
-def main():
+
+def run():
     # enable SIGINT (Ctrl+C)
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
