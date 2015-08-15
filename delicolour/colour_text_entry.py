@@ -46,6 +46,7 @@ class ColourTextEntry(Gtk.Entry):
 
     def _get_clipboard(self):
         txt = Gtk.Clipboard.get(self._clipboard_sel).wait_for_text()
+
         if txt is not None:
             txt = self._text_from_clipboard(txt)
 
@@ -57,6 +58,7 @@ class ColourTextEntry(Gtk.Entry):
     def _on_copy(self, entry):
         if self._current_text_is_valid():
             self._set_clipboard()
+
         self.stop_emission('copy-clipboard')
 
     def _on_paste(self, entry):
