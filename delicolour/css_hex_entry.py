@@ -7,7 +7,7 @@ from gi.repository import Gdk
 from gi.repository import Pango
 
 
-class HexEntry(ColourTextEntry):
+class CssHexEntry(ColourTextEntry):
     def __init__(self, lower=True, copy_hash=True):
         # parameters
         self._lower = lower

@@ -1,9 +1,9 @@
 from delicolour.fine_controls import FineControls
+from delicolour.css_hex_entry import CssHexEntry
+from delicolour.css_rgb_entry import CssRgbEntry
 from delicolour.scale_entry import ScaleEntry
 from delicolour.big_colour import BigColour
 from delicolour.app_model import AppModel
-from delicolour.hex_entry import HexEntry
-from delicolour.rgb_entry import RgbEntry
 from gi.repository import Pango
 from delicolour import config
 from gi.repository import Gtk
@@ -119,11 +119,11 @@ class MainWindow(Gtk.Window):
 
     def _init_css_entries(self):
         # hex entry
-        self._css_hex_entry = HexEntry()
+        self._css_hex_entry = CssHexEntry()
         self._css_hex_entry.on_change(self._update_model_from_css_hex)
 
         # RGB entry
-        self._css_rgb_entry = RgbEntry()
+        self._css_rgb_entry = CssRgbEntry()
         self._css_rgb_entry.on_change(self._update_model_from_css_rgb)
 
         # hboxes

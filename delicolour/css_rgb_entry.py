@@ -7,7 +7,7 @@ from gi.repository import Gtk
 import re
 
 
-class RgbEntry(ColourTextEntry):
+class CssRgbEntry(ColourTextEntry):
     def __init__(self):
         super().__init__(18)
 
