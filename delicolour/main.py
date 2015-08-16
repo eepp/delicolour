@@ -24,7 +24,10 @@ def _parse_args():
 
     ap.add_argument('-f', '--fav-colours-count', action='store', type=int,
                     metavar='COUNT', default=12,
-                    help='number of fav colours (default: 12)')
+                    help='number of fav colours per row (default: 12)')
+    ap.add_argument('-F', '--fav-colours-rows-count', action='store', type=int,
+                    metavar='COUNT', default=1,
+                    help='number of rows of fav colours (default: 1)')
     ap.add_argument('-l', '--left-colour', action='store', metavar='HEX',
                     help='initial left color (CSS hex)')
     ap.add_argument('-r', '--right-colour', action='store', metavar='HEX',
@@ -38,6 +41,10 @@ def _parse_args():
     # validate --fav-colours-count
     if args.fav_colours_count < 1 or args.fav_colours_count > 16:
         _perror('--fav-colours-count must be in [1, 16] range')
+
+    # validate --fav-colours-rows-count
+    if args.fav_colours_rows_count < 1 or args.fav_colours_rows_count > 4:
+        _perror('--fav-colours-count must be in [1, 4] range')
 
     return args
 
