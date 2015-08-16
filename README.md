@@ -18,7 +18,7 @@ from the main window.
     the other controls)
   * Big colour rectangle showing your two current colours
   * Up to four rows of 16 favorite colours at the top (number of rows
-    and colours per rows is configurable with a command-line option)
+    and colours per rows is configurable with command-line options)
   * RGB values (0 to 255)
   * HSV values (0 to 359 for hue and 0 to 100 for saturation and value)
   * Scrollable sliders and entries (hue wraps)
@@ -38,6 +38,7 @@ on your system:
 
   * Python 3
   * [PyGObject](https://wiki.gnome.org/action/show/Projects/PyGObject) 3
+  * GTK+ 3
   * pip for Python 3
 
 The following instructions show how to do so on a few major
@@ -50,17 +51,17 @@ distributions:
 
 **Debian**:
 
-    sudo apt-get install python3-pip python3-gi python3-gi-cairo
+    sudo apt-get install python3-pip gtk+3.0 python3-gi python3-gi-cairo
     sudo pip3 install delicolour
 
 **Fedora 20 and up**:
 
-    sudo yum install python3-pip python3-gobject
+    sudo yum install python3-pip gtk3 python3-gobject
     sudo pip3 install delicolour
 
 **Arch Linux**:
 
-    sudo install python-pip python-gobject
+    sudo install python-pip gtk3 python-gobject
     sudo pip install delicolour
 
 Or, using Yaourt:
