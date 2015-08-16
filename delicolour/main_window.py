@@ -64,10 +64,10 @@ class MainWindow(Gtk.Window):
         elif key_name == 'x':
             # set to white
             self._set_model_rgb(255, 255, 255)
-        elif key_name == 'minus':
+        elif key_name == 'minus' or key_name == 'KP_Subtract':
             # decrease lightness
             self._on_dec_light()
-        elif key_name == 'plus' or key_name == 'equal':
+        elif key_name == 'plus' or key_name == 'equal' or key_name == 'KP_Add':
             # increase lightness
             self._on_inc_light()
         elif key_name == 'q':
