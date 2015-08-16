@@ -139,9 +139,9 @@ class ScaleEntry(Gtk.Box):
         y_scroll = ev.get_scroll_deltas()[2]
 
         if y_scroll < 0:
-            value -= self._page_incr
-        elif y_scroll > 0:
             value += self._page_incr
+        elif y_scroll > 0:
+            value -= self._page_incr
 
         # wrap?
         if self._wrap:
