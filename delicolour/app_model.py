@@ -14,10 +14,12 @@ class AppModel:
 
     @colour.setter
     def colour(self, colour):
+        copy = colour.copy()
+
         if self.sel == 1:
-            self.colour1 = colour
+            self.colour1 = copy
         else:
-            self.colour2 = colour
+            self.colour2 = copy
 
     @property
     def sel(self):

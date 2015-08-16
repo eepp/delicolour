@@ -5,8 +5,13 @@ from colormath.color_objects import HSLColor
 from colormath.color_conversions import convert_color
 
 class Colour:
-    def __init__(self):
-        self.set_rgb(0, 0, 0)
+    def __init__(self, r=0, g=0, b=0):
+        self.set_rgb(r, g, b)
+
+    def __repr__(self):
+        r, g, b = self.rgb
+
+        return 'Colour({}, {}, {})'.format(r, g, b)
 
     def set_rgb(self, r, g, b):
         self._set_rgb_color(AdobeRGBColor(r, g, b, True))
@@ -180,3 +185,7 @@ class Colour:
 
         return c
 
+    def copy(self):
+        r, g, b = self.rgb
+
+        return Colour.from_rgb(r, g, b)
