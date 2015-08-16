@@ -48,16 +48,16 @@ class BigColour(Gtk.DrawingArea):
     def _on_draw(self, drawing_area, cr):
         def do_rect_path():
             # rectangle with rounded corners
-            cr.arc(width - br - 2 * lw, br + lw, br, -0.5 * math.pi, 0)
-            cr.arc(width - br - 2 * lw, height - br - 2 * lw, br, 0, 0.5 * math.pi)
-            cr.arc(br + lw, height - br - 2 * lw, br, 0.5 * math.pi, 1 * math.pi)
+            cr.arc(width - br - lw, br + lw, br, -0.5 * math.pi, 0)
+            cr.arc(width - br - lw, height - br - lw, br, 0, 0.5 * math.pi)
+            cr.arc(br + lw, height - br - lw, br, 0.5 * math.pi, 1 * math.pi)
             cr.arc(br + lw, br + lw, br, 1 * math.pi, -0.5 * math.pi)
             cr.close_path()
 
         def do_half_path():
-            cr.arc(width - br - 2 * lw, br + lw, br, -0.5 * math.pi, 0)
-            cr.arc(width - br - 2 * lw, height - br - 2 * lw, br, 0, 0.5 * math.pi)
-            cr.line_to(round(width / lw) - diag_dist, height - 2 * lw)
+            cr.arc(width - br - lw, br + lw, br, -0.5 * math.pi, 0)
+            cr.arc(width - br - lw, height - br - lw, br, 0, 0.5 * math.pi)
+            cr.line_to(round(width / lw) - diag_dist, height - lw)
             cr.line_to(round(width / lw) + diag_dist, lw)
             cr.close_path()
 
@@ -82,7 +82,7 @@ class BigColour(Gtk.DrawingArea):
             if self._sel == 1:
                 tr_x = dot_dist + lw
             else:
-                tr_x = width - dot_dist - 2 * lw
+                tr_x = width - dot_dist - lw
 
             do_dot_path(tr_x, tr_y)
             cr.fill()
