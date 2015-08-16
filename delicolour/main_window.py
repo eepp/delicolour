@@ -243,7 +243,7 @@ class MainWindow(Gtk.Window):
             self._model.colour = fav_colour.colour
             self._update_view()
         elif event.button == 3:
-            fav_colour.set_colour(self._model.colour)
+            fav_colour.set_colour(self._model.colour.copy())
             self._update_view()
 
     def _on_sel_change(self, sel):
