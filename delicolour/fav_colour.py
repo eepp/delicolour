@@ -34,7 +34,7 @@ class FavColour(Gtk.DrawingArea):
 
     def _on_draw(self, drawing_area, cr):
         def do_path():
-            cr.rectangle(lw, lw, width - 1, height - 1)
+            cr.rectangle(lw, lw, width - 2 * lw, height - 2 * lw)
 
         def set_source_rgb(colour):
             r, g, b = colour.rgb
@@ -44,7 +44,7 @@ class FavColour(Gtk.DrawingArea):
             cr.set_source_rgb(r, g, b)
 
         width, height = self._get_size()
-        lw = 1
+        lw = 2
 
         # fill colour 1
         set_source_rgb(self._colour)
@@ -53,7 +53,7 @@ class FavColour(Gtk.DrawingArea):
 
         # stroke around everything
         cr.set_line_width(lw)
-        cr.set_source_rgb(0.3, 0.3, 0.3)
+        cr.set_source_rgb(.3, .3, .3)
         do_path()
         cr.stroke()
 
