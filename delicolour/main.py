@@ -6,6 +6,7 @@ gi.require_version('Gtk', '3.0')
 
 
 from delicolour import main_window
+from delicolour import config
 from gi.repository import Gtk
 import delicolour
 import argparse
@@ -28,6 +29,9 @@ def _parse_args():
     ap.add_argument('-F', '--fav-colours-rows-count', action='store', type=int,
                     metavar='COUNT', default=1,
                     help='number of rows of fav colours (default: 1)')
+    ap.add_argument('-i', '--increment', action='store', metavar='VALUE',
+                    type=int, default=1,
+                    help='fine-tuning increment (default: 1)')
     ap.add_argument('-l', '--left-colour', action='store', metavar='HEX',
                     help='initial left color (CSS hex)')
     ap.add_argument('-r', '--right-colour', action='store', metavar='HEX',
@@ -44,7 +48,14 @@ def _parse_args():
 
     # validate --fav-colours-rows-count
     if args.fav_colours_rows_count < 1 or args.fav_colours_rows_count > 4:
-        _perror('--fav-colours-count must be in [1, 4] range')
+        _perror('--fav-colours-rows-count must be in [1, 4] range')
+
+    # validate --increment
+    mn = config.INCR_SPINNER_MIN_VAL
+    mx =  config.INCR_SPINNER_MAX_VAL
+
+    if args.increment < mn or args.increment > mx:
+        _perror('--increment must be in [{}, {}] range'.format(mn, mx))
 
     return args
 

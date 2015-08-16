@@ -5,7 +5,7 @@ from gi.repository import Pango
 
 
 class AdjustmentControls(Gtk.Box):
-    def __init__(self, minval, maxval):
+    def __init__(self, minval, maxval, init_adj):
         # user callbacks
         self._user_on_incr_change = None
 
@@ -19,6 +19,7 @@ class AdjustmentControls(Gtk.Box):
 
         # controls
         self._init_controls()
+        self._value_lbl.set_text(str(init_adj))
 
     @staticmethod
     def _new_btn(label, tooltip_text):

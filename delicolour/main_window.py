@@ -47,6 +47,8 @@ class MainWindow(Gtk.Window):
             except:
                 pass
 
+        self._model.fine_incr = self._args.increment
+
     def _make_me_nice(self):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_border_width(round(config.MAIN_GUTTER_PX * 1.5))
@@ -109,7 +111,8 @@ class MainWindow(Gtk.Window):
     def _init_fine_colour_controls(self):
         # fine controls
         self._fine_controls = FineControls(config.INCR_SPINNER_MIN_VAL,
-                                     config.INCR_SPINNER_MAX_VAL)
+                                           config.INCR_SPINNER_MAX_VAL,
+                                           self._args.increment)
         self._main_box.pack_start(self._fine_controls, True, True, 0)
 
         # set callbacks

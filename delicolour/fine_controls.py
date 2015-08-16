@@ -8,7 +8,7 @@ from delicolour.adjustment_controls import AdjustmentControls
 
 
 class FineControls(Gtk.Box):
-    def __init__(self, minval, maxval):
+    def __init__(self, minval, maxval, init_adj):
         # parameters
         self._minval = minval
         self._maxval = maxval
@@ -22,7 +22,7 @@ class FineControls(Gtk.Box):
         self.set_orientation(Gtk.Orientation.HORIZONTAL)
 
         # controls
-        self._init_controls()
+        self._init_controls(init_adj)
 
     @staticmethod
     def _new_fine_control_btn(img_filename, tooltip_text):
@@ -40,7 +40,7 @@ class FineControls(Gtk.Box):
 
         return resource_filename(__name__, filename)
 
-    def _init_controls(self):
+    def _init_controls(self, init_adj):
         new = FineControls._new_fine_control_btn
         gfn = self._get_filename
 
@@ -68,7 +68,7 @@ class FineControls(Gtk.Box):
         self.pack_end(self._dec_sat, False, False, 0)
 
         # adjustment controls
-        self._adj = AdjustmentControls(1, 15)
+        self._adj = AdjustmentControls(1, 15, init_adj)
         self.pack_start(self._adj, False, False, 0)
 
     def _on_inc_light_clicked(self, btn):
