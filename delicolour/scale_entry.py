@@ -41,7 +41,7 @@ class ScaleEntry(Gtk.Box):
         self._entry.add_events(Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.SMOOTH_SCROLL_MASK)
         self._entry.connect('insert-text', self._on_entry_insert_text)
         self._entry.connect('scroll-event', self._on_entry_scroll_event)
-        self._entry.connect('key_press_event', self._on_entry_key_press)
+        self._entry.connect('key-press-event', self._on_entry_key_press)
         self._entry_changed_handler = self._entry.connect('changed', self._on_entry_changed)
 
         # scale
