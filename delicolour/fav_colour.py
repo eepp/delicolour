@@ -5,9 +5,6 @@ from delicolour.colour import Colour
 
 class FavColour(Gtk.DrawingArea):
     def __init__(self, width, height):
-        # initial colour
-        self._colour = Colour.from_rgb(255, 255, 255)
-
         # initialize drawing area
         super().__init__()
         self.set_size_request(width, height)
@@ -19,6 +16,9 @@ class FavColour(Gtk.DrawingArea):
 
         # user events
         self._user_on_click = None
+
+        # set initial color
+        self.set_colour(Colour.from_rgb(255, 255, 255))
 
     def _get_size(self):
         alloc = self.get_allocation()
@@ -61,6 +61,7 @@ class FavColour(Gtk.DrawingArea):
 
     def set_colour(self, colour):
         self._colour = colour
+        self.set_tooltip_text('#' + self._colour.hex)
         self.queue_draw()
 
     @property
