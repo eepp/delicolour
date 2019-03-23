@@ -1,0 +1,273 @@
+// Render with Asciidoctor
+
+= delicolour
+Philippe Proulx <https://eepp.ca>
+
+image:https://img.shields.io/pypi/v/delicolour.svg?label=Latest%20version[link="https://pypi.python.org/pypi/delicolour"]
+
+**_delicolour_** is a lightweight _colour finder_.
+
+It has only been tested on Linux.
+
+image::http://ss.0x3b.org/refixing219.png[delicolour screenshot]
+
+The goal of delicolour is to have a straightforward user experience for
+the task of choosing a colour (mainly for web design), not as advanced
+as http://www.gpick.org/[Gpick], yet still useful and responsive. The
+core principle is: no tabs or other windows, few clicks, everything
+instantaneously accessible from the main window.
+
+
+== Notable features
+
+* Instant updates (moving one slider or modifying one field updates
+  the other controls).
+* Big colour rectangle showing your two current colours (called _left_
+  and _right_).
+* Up to four rows of 16 favorite colours at the top (number of rows
+  and colours per rows is configurable with command-line options).
+* RGB values (0 to 255).
+* HSV values (0 to 359 for hue and 0 to 100 for saturation and value).
+* Scrollable sliders and entries (hue slider wraps).
+* Fine colour adjustment buttons (increase/decrease saturation and
+  lightness) with adjustable increment value.
+* CSS hex and RGB strings.
+* Intelligent copy/paste (paste `\#rrggbb` or `rrggbb` into the hex
+  text box and decide if you want to prepend the `#` character when
+  copying).
+* Useful keyboard shortcuts.
+
+
+== Install
+
+Make sure you have the dependencies:
+
+* Python 3
+* https://pypi.org/project/colormath/[colormath] 3
+* GTK 3
+* https://wiki.gnome.org/action/show/Projects/PyGObject[PyGObject] 3
+* pip for Python 3
+
+The package on PyPI is
+https://pypi.org/project/delicolour/[`delicolour`].
+
+
+=== Ubuntu
+
+----
+sudo apt-get install python3-pip python3-gi python3-gi-cairo
+sudo pip3 install delicolour
+----
+
+
+=== Debian
+
+----
+sudo apt-get install python3-pip gtk+3.0 python3-gi python3-gi-cairo
+sudo pip3 install delicolour
+----
+
+
+=== Fedora ≥ 20
+
+----
+sudo yum install python3-pip gtk3 python3-gobject
+sudo pip3 install delicolour
+----
+
+=== Arch Linux
+
+----
+sudo install python-pip gtk3 python-gobject
+sudo pip install delicolour
+----
+
+
+== Usage
+
+Launch delicolour:
+
+----
+delicolour
+----
+
+See `delicolour --help` for a list of command-line options.
+
+
+=== Interface
+
+==== Window title
+
+----
+delicolour: #bba6de [#184c99]
+----
+
+The window title indicates the two current colours. The one being
+currently edited is between `[` and `]`.
+
+
+==== Favorite colours
+
+image::http://ss.0x3b.org/impercipience71.png[]
+
+Favorite colours are little squares at the top of the window which
+you can set to the current colour by right-clicking them.
+
+You can set the current colour from a favorite colour by left-clicking
+it.
+
+The `-f`/`--fav-colours-count` and `-F`/`--fav-colours-rows-count`
+command-line options control the number of available favorite colours.
+
+delicolour does not remember favorite colours once you quit it.
+
+
+==== The big rectangle
+
+image::http://ss.0x3b.org/poikilothermal774.png[]
+
+The big rectangle below favorite colours shows the two current colours.
+
+A little dot located at the top left or top right corner of the
+big rectangle indicates which of the two colours is the one currently
+being edited. You can switch to one or the other by clicking the
+left or right side of the big rectangle.
+
+You can set the initial left and right colours when you launch
+delicolour with the `-l`/`--left-colour` and `-r`/`--right-colour`
+command-line options.
+
+
+==== Fine-tuning controls
+
+image::http://ss.0x3b.org/unuprightly55.png[]
+
+With fine-tuning controls, you can modify the current colour using
+buttons to finely increment/decrement parameters.
+
+The control on the left side is the _increment value_. When you press
+one of the buttons on the right side, you add/subtract this value
+to/from the button's parameter's current value.
+
+The parameters (buttons), from left to right, are:
+
+* Decrease saturation (_S_ in HSV)
+* Increase saturation
+* Decrease lightness (_L_ in HSL)
+* Increase lightness
+
+The increment value also controls the incrementation/decrementation
+amount of the sliders when you scroll them with the mouse wheel.
+
+The `-i`/`--increment` command-line option controls the initial
+fine-tuning increment value.
+
+
+==== RGB
+
+image::http://ss.0x3b.org/stockjobbery593.png[]
+
+The RGB sliders control the amount of red, green, and blue in the
+current colour.
+
+You can scroll the sliders and text boxes with the mouse wheel.
+
+
+==== HSV
+
+image::http://ss.0x3b.org/fuzees835.png[]
+
+The HSV sliders control the hue, saturation, and value or the current
+colour.
+
+You can scroll the sliders and text boxes with the mouse wheel. The hue
+slider wraps when you scroll its text box.
+
+
+==== CSS hex
+
+image::http://ss.0x3b.org/overglide667.png[]
+
+The CSS hex text box shows and controls the CSS hexadecimal value of the
+current colour.
+
+You can copy the CSS hex value to the clipboard by clicking the text box
+and pressing *Ctrl*+*C* (no need to select the whole text). If the
+_Copy \#_ option is checked, delicolour preprends a `#` character to
+the copied value.
+
+You can paste a CSS hex value, with or without a `#` prefix, by clicking
+the text box and pressing *Ctrl*+*V* (no need to select the whole text).
+
+If the _Lowercase_ option is checked, delicolour prints the CSS hex
+value in lowercase when updating.
+
+
+==== CSS RGB
+
+image::http://ss.0x3b.org/nuzzer45.png[]
+
+The CSS RGB text box shows and controls the CSS RGB value of the current
+colour.
+
+You can copy the CSS RGB value to the clipboard by clicking the text box
+and pressing *Ctrl*+*C* (no need to select the whole text).
+
+You can paste a CSS RGB value, with or without a `#` prefix, by clicking
+the text box and pressing *Ctrl*+*V* (no need to select the whole text).
+
+
+=== Keyboard shortcuts
+
+==== Global shortcuts
+
+You can always use the following keyboard shortcuts:
+
+[cols=2*,options="header"]
+|===
+|Key
+|Action
+
+|*z*
+|Set current colour to black
+
+|*x*
+|Set current colour to white
+
+|*q*
+|Decrease saturation
+
+|*w*
+|Increase saturation
+
+|*-*
+|Decrease lightness
+
+|*=* or *+*
+|Increase lightness
+
+|*#*
+|Toggle current colour
+|===
+
+
+==== RGB shortcuts
+
+You can use the following keyboard shortcuts when the focus is on one of
+the R, G, and B text boxes:
+
+[cols=2*,options="header"]
+|===
+|Key
+|Action
+
+|*r*
+| Copy current component value to the R text box
+
+|*g*
+| Copy current component value to the G text box
+
+|*b*
+| Copy current component value to the B text box
+|===
+
