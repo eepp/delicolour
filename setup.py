@@ -25,7 +25,7 @@ setup(name='delicolour',
           ],
       },
       install_requires=[
-          'colormath>=2,<3',
+          'colormath>=3',
       ],
       entry_points={
           'gui_scripts': [
