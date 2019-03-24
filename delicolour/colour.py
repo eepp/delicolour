@@ -1,5 +1,5 @@
 import re
-from colormath.color_objects import AdobeRGBColor
+from colormath.color_objects import sRGBColor
 from colormath.color_objects import HSVColor
 from colormath.color_objects import HSLColor
 from colormath.color_conversions import convert_color
@@ -14,7 +14,7 @@ class Colour:
         return 'Colour({}, {}, {})'.format(r, g, b)
 
     def set_rgb(self, r, g, b):
-        self._set_rgb_color(AdobeRGBColor(r, g, b, True))
+        self._set_rgb_color(sRGBColor(r, g, b, True))
 
     def set_r(self, r):
         self._rgb_color.rgb_r = r
@@ -32,7 +32,7 @@ class Colour:
         self._set_hsv_color(HSVColor(h, s, v))
 
     def _update_rgb_from_hsv(self):
-        self._rgb_color = convert_color(self._hsv_color, AdobeRGBColor)
+        self._rgb_color = convert_color(self._hsv_color, sRGBColor)
 
     def _update_hsv_from_rgb(self):
         self._hsv_color = convert_color(self._rgb_color, HSVColor)
@@ -67,7 +67,7 @@ class Colour:
         if len(hex_str) != 6:
             return
 
-        color = AdobeRGBColor.new_from_rgb_hex(hex_str)
+        color = sRGBColor.new_from_rgb_hex(hex_str)
         self._set_rgb_color(color)
 
     def _set_hsv_color(self, hsv):
