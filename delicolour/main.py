@@ -23,6 +23,8 @@ def _perror(msg):
 def _parse_args():
     ap = argparse.ArgumentParser()
 
+    ap.add_argument('maincolour', metavar='MAIN COLOUR', nargs='?',
+                    help='main colour')
     ap.add_argument('-f', '--fav-colours-count', action='store', type=int,
                     metavar='COUNT', default=12,
                     help='number of fav colours per row (default: 12)')
@@ -52,7 +54,7 @@ def _parse_args():
 
     # validate --increment
     mn = config.INCR_SPINNER_MIN_VAL
-    mx =  config.INCR_SPINNER_MAX_VAL
+    mx = config.INCR_SPINNER_MAX_VAL
 
     if args.increment < mn or args.increment > mx:
         _perror('--increment must be in [{}, {}] range'.format(mn, mx))

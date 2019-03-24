@@ -11,6 +11,7 @@ from delicolour import config
 from gi.repository import Gtk
 from gi.repository import Gdk
 from functools import partial
+import copy
 
 
 class MainWindow(Gtk.Window):
@@ -33,19 +34,27 @@ class MainWindow(Gtk.Window):
         self._model.colour = colour
 
     def _apply_args(self):
-        if self._args.left_colour is not None:
+        if self._args.maincolour is not None:
             try:
-                colour = Colour.from_hex(self._args.left_colour)
+                colour = Colour.from_hex(self._args.maincolour)
                 self._model.colour1 = colour
+                self._model.colour2 = copy.deepcopy(colour)
             except:
                 pass
+        else:
+            if self._args.left_colour is not None:
+                try:
+                    colour = Colour.from_hex(self._args.left_colour)
+                    self._model.colour1 = colour
+                except:
+                    pass
 
-        if self._args.right_colour is not None:
-            try:
-                colour = Colour.from_hex(self._args.right_colour)
-                self._model.colour2 = colour
-            except:
-                pass
+            if self._args.right_colour is not None:
+                try:
+                    colour = Colour.from_hex(self._args.right_colour)
+                    self._model.colour2 = colour
+                except:
+                    pass
 
         self._model.fine_incr = self._args.increment
 

@@ -134,8 +134,13 @@ being edited. You can switch to one or the other by clicking the
 left or right side of the big rectangle.
 
 You can set the initial left and right colours when you launch
-delicolour with the `-l`/`--left-colour` and `-r`/`--right-colour`
-command-line options.
+delicolour with one of:
+
+* The first positional argument, for example `delicolour fd487e`. This
+  sets both the left and right colours at the same time.
+
+* The `-l`/`--left-colour` and `-r`/`--right-colour` command-line
+  options.
 
 
 ==== Fine-tuning controls
