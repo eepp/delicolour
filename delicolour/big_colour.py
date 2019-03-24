@@ -6,8 +6,8 @@ from delicolour.colour import Colour
 class BigColour(Gtk.DrawingArea):
     def __init__(self, border_radius=4, height=75):
         # initial colours
-        self._colour1 = Colour.from_rgb(0, 0, 0)
-        self._colour2 = Colour.from_rgb(0, 0, 0)
+        self._colour_l = Colour.from_rgb(0, 0, 0)
+        self._colour_r = Colour.from_rgb(0, 0, 0)
         self._sel = 1
 
         # save border radius
@@ -99,12 +99,12 @@ class BigColour(Gtk.DrawingArea):
         diag_dist = 5
 
         # fill colour 1
-        set_source_rgb(self._colour1)
+        set_source_rgb(self._colour_l)
         do_rect_path()
         cr.fill()
 
         # fill colour 2
-        set_source_rgb(self._colour2)
+        set_source_rgb(self._colour_r)
         do_half_path()
         cr.fill()
 
@@ -119,20 +119,20 @@ class BigColour(Gtk.DrawingArea):
 
         return False
 
-    def set_colour1(self, colour):
-        self._colour1 = colour
+    def set_colour_l(self, colour):
+        self._colour_l = colour
         self.queue_draw()
 
-    def set_colour2(self, colour):
-        self._colour2 = colour
+    def set_colour_r(self, colour):
+        self._colour_r = colour
         self.queue_draw()
 
     def set_rgb1(self, r, g, b):
-        self._colour1.set_rgb(r, g, b)
+        self._colour_l.set_rgb(r, g, b)
         self.queue_draw()
 
     def set_rgb2(self, r, g, b):
-        self._colour2.set_rgb(r, g, b)
+        self._colour_r.set_rgb(r, g, b)
         self.queue_draw()
 
     def set_sel(self, sel):

@@ -37,22 +37,22 @@ class MainWindow(Gtk.Window):
         if self._args.maincolour is not None:
             try:
                 colour = Colour.from_hex(self._args.maincolour)
-                self._model.colour1 = colour
-                self._model.colour2 = copy.deepcopy(colour)
+                self._model.colour_l = colour
+                self._model.colour_r = copy.deepcopy(colour)
             except:
                 pass
         else:
             if self._args.left_colour is not None:
                 try:
                     colour = Colour.from_hex(self._args.left_colour)
-                    self._model.colour1 = colour
+                    self._model.colour_l = colour
                 except:
                     pass
 
             if self._args.right_colour is not None:
                 try:
                     colour = Colour.from_hex(self._args.right_colour)
-                    self._model.colour2 = colour
+                    self._model.colour_r = colour
                 except:
                     pass
 
@@ -364,8 +364,8 @@ class MainWindow(Gtk.Window):
         self._update_settings()
 
     def _update_big_colour(self):
-        self._big_colour.set_colour1(self._model.colour1)
-        self._big_colour.set_colour2(self._model.colour2)
+        self._big_colour.set_colour_l(self._model.colour_l)
+        self._big_colour.set_colour_r(self._model.colour_r)
         self._big_colour.set_sel(self._model.sel)
 
     def _update_rgb_ctrls(self):
@@ -419,9 +419,9 @@ class MainWindow(Gtk.Window):
             return fmt.format(hx)
 
         fmt = 'delicolour: {} {}'
-        colour1_title = get_color_title(self._model.colour1, self._model.colour)
-        colour2_title = get_color_title(self._model.colour2, self._model.colour)
-        title = fmt.format(colour1_title, colour2_title)
+        colour_l_title = get_color_title(self._model.colour_l, self._model.colour)
+        colour_r_title = get_color_title(self._model.colour_r, self._model.colour)
+        title = fmt.format(colour_l_title, colour_r_title)
         self.set_title(title)
 
     def _update_view(self, focused_ctrl=None):

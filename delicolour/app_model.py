@@ -8,18 +8,18 @@ class AppModel:
     @property
     def colour(self):
         if self.sel == 1:
-            return self.colour1
+            return self.colour_l
         else:
-            return self.colour2
+            return self.colour_r
 
     @colour.setter
     def colour(self, colour):
         copy = colour.copy()
 
         if self.sel == 1:
-            self.colour1 = copy
+            self.colour_l = copy
         else:
-            self.colour2 = copy
+            self.colour_r = copy
 
     @property
     def sel(self):
@@ -32,8 +32,8 @@ class AppModel:
     @staticmethod
     def get_default():
         model = AppModel()
-        model.colour1 = Colour.from_rgb(255, 255, 255)
-        model.colour2 = Colour.from_rgb(0, 0, 0)
+        model.colour_l = Colour.from_rgb(255, 255, 255)
+        model.colour_r = Colour.from_rgb(0, 0, 0)
         model.css_hex_copy_hash = True
         model.css_hex_lower = True
         model.fine_incr = 1
