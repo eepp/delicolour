@@ -12,6 +12,16 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 from functools import partial
 import copy
+import enum
+
+
+@enum.unique
+class ControlType(enum.Enum):
+    INIT = -1
+    HSV = 0
+    RGB = 1
+    CSS_HEX = 2
+    CSS_RGB = 3
 
 
 class MainWindow(Gtk.Window):
@@ -23,7 +33,7 @@ class MainWindow(Gtk.Window):
         self._init_keyb()
         self._model = AppModel.get_default()
         self._apply_args()
-        self._update_view('init')
+        self._update_view(ControlType.INIT)
 
     def _apply_arg_init(self, init):
         try:
@@ -339,24 +349,24 @@ class MainWindow(Gtk.Window):
     def _update_model_from_rgb(self):
         r, g, b = self._get_rgb_ctrl_values()
         self._model.colour.set_rgb(r, g, b)
-        self._update_view('rgb')
+        self._update_view(ControlType.RGB)
 
     def _update_model_from_hsv(self):
         h, s, v = self._get_hsv_ctrl_values()
         s /= 100
         v /= 100
         self._model.colour.set_hsv(h, s, v)
-        self._update_view('hsv')
+        self._update_view(ControlType.HSV)
 
     def _update_model_from_css_hex(self):
         colour = self._css_hex_entry.colour
         self._model.colour = colour
-        self._update_view('css-hex')
+        self._update_view(ControlType.CSS_HEX)
 
     def _update_model_from_css_rgb(self):
         colour = self._css_rgb_entry.colour
         self._model.colour = colour
-        self._update_view('css-rgb')
+        self._update_view(ControlType.CSS_RGB)
 
     def _update_model_from_settings(self):
         self._model.css_hex_copy_hash = self._css_hex_copy_hash_opt.get_active()
@@ -428,18 +438,18 @@ class MainWindow(Gtk.Window):
         self._update_title()
         self._update_big_colour()
 
-        if focused_ctrl != 'hsv':
+        if focused_ctrl != ControlType.HSV:
             self._update_hsv_ctrls()
 
-        if focused_ctrl != 'rgb':
+        if focused_ctrl != ControlType.RGB:
             self._update_rgb_ctrls()
 
-        if focused_ctrl != 'css-hex':
+        if focused_ctrl != ControlType.CSS_HEX:
             self._update_css_hex()
 
-        if focused_ctrl != 'css-rgb':
+        if focused_ctrl != ControlType.CSS_RGB:
             self._update_css_rgb()
 
-        if focused_ctrl == 'init':
+        if focused_ctrl == ControlType.INIT:
             self._update_settings()
             self._update_all_incr()
