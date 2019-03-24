@@ -22,20 +22,22 @@ instantaneously accessible from the main window.
 
 * Instant updates (moving one slider or modifying one field updates
   the other controls).
-* Big colour rectangle showing your two current colours (called _left_
-  and _right_).
-* Up to four rows of 16 favorite colours at the top (number of rows
-  and colours per rows is configurable with command-line options).
-* RGB values (0 to 255).
-* HSV values (0 to 359 for hue and 0 to 100 for saturation and value).
+* <<big-colour,Big colour rectangle>> showing your two current colours
+  (called _left_ and _right_).
+* Up to four rows of 16 <<favorite-colours,favorite colours>> at the top
+  (number of rows and colours per rows is configurable with command-line
+  options).
+* <<rgb,RGB values>> (0 to 255).
+* <<hsv,HSV values>> (0 to 359 for hue and 0 to 100 for saturation and
+  value).
 * Scrollable sliders and entries (hue slider wraps).
-* Fine colour adjustment buttons (increase/decrease saturation and
-  lightness) with adjustable increment value.
-* CSS hex and RGB strings.
+* <<fine-tuning,Fine colour adjustment buttons>> (increase/decrease
+  saturation and lightness) with adjustable increment value.
+* <<css-hex,CSS hex>> and <<css-rgb,RGB>> strings.
 * Intelligent copy/paste (paste `\#rrggbb` or `rrggbb` into the hex
   text box and decide if you want to prepend the `#` character when
   copying).
-* Useful keyboard shortcuts.
+* Useful <<keyboard-shortcuts,keyboard shortcuts>>.
 
 
 == Install
@@ -106,6 +108,7 @@ The window title indicates the two current colours. The one being
 currently edited is between `[` and `]`.
 
 
+[[favorite-colours]]
 ==== Favorite colours
 
 image::http://ss.0x3b.org/impercipience71.png[]
@@ -125,11 +128,13 @@ command-line options control the number of available favorite colours.
 delicolour does not remember favorite colours once you quit it.
 
 
+[[big-colour]]
 ==== The big rectangle
 
 image::http://ss.0x3b.org/poikilothermal774.png[]
 
-The big rectangle below favorite colours shows the two current colours.
+The big rectangle below <<favorite-colours,favorite colours>> shows the
+two current colours.
 
 A little dot located at the top left or top right corner of the
 big rectangle indicates which of the two colours is the one currently
@@ -146,6 +151,7 @@ delicolour with one of:
   options.
 
 
+[[fine-tuning]]
 ==== Fine-tuning controls
 
 image::http://ss.0x3b.org/unuprightly55.png[]
@@ -171,6 +177,7 @@ The `-i`/`--increment` command-line option controls the initial
 fine-tuning increment value.
 
 
+[[rgb]]
 ==== RGB
 
 image::http://ss.0x3b.org/stockjobbery593.png[]
@@ -181,6 +188,7 @@ current colour.
 You can scroll the sliders and text boxes with the mouse wheel.
 
 
+[[hsv]]
 ==== HSV
 
 image::http://ss.0x3b.org/fuzees835.png[]
@@ -192,6 +200,7 @@ You can scroll the sliders and text boxes with the mouse wheel. The hue
 slider wraps when you scroll its text box.
 
 
+[[css-hex]]
 ==== CSS hex
 
 image::http://ss.0x3b.org/overglide667.png[]
@@ -212,6 +221,7 @@ If the _Lowercase_ option is checked, delicolour prints the CSS hex
 value in lowercase when updating.
 
 
+[[css-rgb]]
 ==== CSS RGB
 
 image::http://ss.0x3b.org/nuzzer45.png[]
@@ -227,6 +237,7 @@ the text box and pressing **Ctrl**pass:[+]**V** (no need to select the
 whole text).
 
 
+[[keyboard-shortcuts]]
 === Keyboard shortcuts
 
 ==== Global shortcuts
@@ -245,13 +256,15 @@ You can always use the following keyboard shortcuts:
 |Set current colour to white
 
 |*#*
-|Toggle current colour
+|Toggle current colour being edited
 
 |*1* to *9*
-|Set current colour from favorite colour 1 to 9 (first row)
+|Set current colour from <<favorite-colours,favorite colour>> 1 to 9
+(first row)
 
 |**Ctrl**pass:[+]**1** to **Ctrl**pass:[+]**9**
-|Set favorite colour 1 to 9 (first row) from current colour
+|Set <<favorite-colours,favorite colour>> 1 to 9 (first row) from
+current colour
 
 |*q*
 |Decrease saturation
