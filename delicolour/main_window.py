@@ -48,7 +48,7 @@ class MainWindow(Gtk.Window):
             try:
                 colour = Colour.from_hex(self._args.maincolour)
                 self._model.colour_l = colour
-                self._model.colour_r = copy.deepcopy(colour)
+                self._model.colour_r = colour.copy()
             except:
                 pass
         else:
@@ -105,6 +105,34 @@ class MainWindow(Gtk.Window):
                 self._model.sel = 1
 
             self._update_view()
+        elif len(key_name) == 1 and ord(key_name) >= ord('1') and ord(key_name) <= ord('9'):
+            self._on_number_key(key_name, event)
+
+    def _on_number_key(self, key_name, event):
+        index = ord(key_name) - ord('1')
+        fav_colour = self._first_row_fav_colour(index)
+
+        if fav_colour is None:
+            return
+
+        if event.state == Gdk.ModifierType.CONTROL_MASK:
+            fav_colour.set_colour(self._model.colour.copy())
+            self._update_view()
+        elif event.state == 0:
+            if type(self.get_focus()) is Gtk.Entry:
+                return
+
+            self._model.colour = fav_colour.colour
+            self._update_view()
+
+    def _first_row_fav_colour(self, index):
+        if self._args.fav_colours_rows_count == 0:
+            return
+
+        if index >= self._args.fav_colours_count:
+            return
+
+        return self._fav_colours.fav_colours[index]
 
     def _init_main_box(self):
         self._main_box = Gtk.Box(spacing=config.MAIN_GUTTER_PX,

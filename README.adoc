@@ -110,11 +110,14 @@ currently edited is between `[` and `]`.
 
 image::http://ss.0x3b.org/impercipience71.png[]
 
-Favorite colours are little squares at the top of the window which
-you can set to the current colour by right-clicking them.
+Favorite colours are little squares at the top of the window.
+
+You can set a favorite colour from the current colour by right-clicking
+it or with the keyboard shortcuts **Ctrl**pass:[+]**1** to
+**Ctrl**pass:[+]**9**.
 
 You can set the current colour from a favorite colour by left-clicking
-it.
+it or with the keyboard shortcuts *1* to *9*.
 
 The `-f`/`--fav-colours-count` and `-F`/`--fav-colours-rows-count`
 command-line options control the number of available favorite colours.
@@ -197,12 +200,13 @@ The CSS hex text box shows and controls the CSS hexadecimal value of the
 current colour.
 
 You can copy the CSS hex value to the clipboard by clicking the text box
-and pressing *Ctrl*+*C* (no need to select the whole text). If the
-_Copy \#_ option is checked, delicolour preprends a `#` character to
-the copied value.
+and pressing **Ctrl**pass:[+]**C** (no need to select the whole text).
+If the _Copy \#_ option is checked, delicolour preprends a `#` character
+to the copied value.
 
 You can paste a CSS hex value, with or without a `#` prefix, by clicking
-the text box and pressing *Ctrl*+*V* (no need to select the whole text).
+the text box and pressing **Ctrl**pass:[+]**V** (no need to select the
+whole text).
 
 If the _Lowercase_ option is checked, delicolour prints the CSS hex
 value in lowercase when updating.
@@ -216,10 +220,11 @@ The CSS RGB text box shows and controls the CSS RGB value of the current
 colour.
 
 You can copy the CSS RGB value to the clipboard by clicking the text box
-and pressing *Ctrl*+*C* (no need to select the whole text).
+and pressing **Ctrl**pass:[+]**C** (no need to select the whole text).
 
 You can paste a CSS RGB value, with or without a `#` prefix, by clicking
-the text box and pressing *Ctrl*+*V* (no need to select the whole text).
+the text box and pressing **Ctrl**pass:[+]**V** (no need to select the
+whole text).
 
 
 === Keyboard shortcuts
@@ -239,6 +244,15 @@ You can always use the following keyboard shortcuts:
 |*x*
 |Set current colour to white
 
+|*#*
+|Toggle current colour
+
+|*1* to *9*
+|Set current colour from favorite colour 1 to 9 (first row)
+
+|**Ctrl**pass:[+]**1** to **Ctrl**pass:[+]**9**
+|Set favorite colour 1 to 9 (first row) from current colour
+
 |*q*
 |Decrease saturation
 
@@ -250,9 +264,6 @@ You can always use the following keyboard shortcuts:
 
 |*=* or *+*
 |Increase lightness
-
-|*#*
-|Toggle current colour
 |===
 
 
