@@ -57,31 +57,30 @@ https://pypi.org/project/delicolour/[`delicolour`].
 === Ubuntu
 
 ----
-sudo apt-get install python3-pip python3-gi python3-gi-cairo
-sudo pip3 install delicolour
+$ sudo apt-get install python3-pip python3-gi python3-gi-cairo
+$ sudo pip3 install delicolour
 ----
 
 
 === Debian
 
 ----
-sudo apt-get install python3-pip gtk+3.0 python3-gi python3-gi-cairo
-sudo pip3 install delicolour
+$ sudo apt-get install python3-pip gtk+3.0 python3-gi python3-gi-cairo
+$ sudo pip3 install delicolour
 ----
 
 
 === Fedora ≥ 20
 
 ----
-sudo yum install python3-pip gtk3 python3-gobject
-sudo pip3 install delicolour
+$ sudo yum install python3-pip gtk3 python3-gobject
+$ sudo pip3 install delicolour
 ----
 
 === Arch Linux
 
 ----
-sudo install python-pip gtk3 python-gobject
-sudo pip install delicolour
+$ yay -Sy delicolour
 ----
 
 
