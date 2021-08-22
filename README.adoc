@@ -123,6 +123,7 @@ it or with the keyboard shortcuts *1* to *9*.
 
 The `-f`/`--fav-colours-count` and `-F`/`--fav-colours-rows-count`
 command-line options control the number of available favorite colours.
+Use `--fav-colours-rows-count=0` to disable favorite colours.
 
 delicolour does not remember favorite colours once you quit it.
 
