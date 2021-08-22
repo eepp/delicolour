@@ -151,9 +151,12 @@ class MainWindow(Gtk.Window):
         fav_colours_count = self._args.fav_colours_count
 
         for i in range(self._args.fav_colours_rows_count):
-            self._fav_colours = FavColours(fav_colours_count=fav_colours_count)
-            self._fav_colours.on_fav_colour_click(self._on_fav_colour_click)
-            self._main_box.pack_start(self._fav_colours, True, True, 0)
+            fav_colours = FavColours(fav_colours_count=fav_colours_count)
+            fav_colours.on_fav_colour_click(self._on_fav_colour_click)
+            self._main_box.pack_start(fav_colours, True, True, 0)
+
+            if i == 0:
+                self._fav_colours = fav_colours
 
     def _init_fine_colour_controls(self):
         # fine controls
