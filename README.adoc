@@ -115,8 +115,8 @@ image::http://ss.0x3b.org/impercipience71.png[]
 Favorite colours are little squares at the top of the window.
 
 You can set a favorite colour from the current colour by right-clicking
-it or with the keyboard shortcuts **Ctrl**pass:[+]**1** to
-**Ctrl**pass:[+]**9**.
+it or with the <<keyboard-shortcuts,keyboard shortcuts>>
+**Ctrl**pass:[+]**1** to **Ctrl**pass:[+]**9**.
 
 You can set the current colour from a favorite colour by left-clicking
 it or with the keyboard shortcuts *1* to *9*.
