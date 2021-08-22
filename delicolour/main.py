@@ -49,8 +49,8 @@ def _parse_args():
         _perror('--fav-colours-count must be in [1, 16] range')
 
     # validate --fav-colours-rows-count
-    if args.fav_colours_rows_count < 1 or args.fav_colours_rows_count > 4:
-        _perror('--fav-colours-rows-count must be in [1, 4] range')
+    if args.fav_colours_rows_count < 0 or args.fav_colours_rows_count > 4:
+        _perror('--fav-colours-rows-count must be in [0, 4] range')
 
     # validate --increment
     mn = config.INCR_SPINNER_MIN_VAL
